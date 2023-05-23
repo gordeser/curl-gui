@@ -42,10 +42,28 @@ class Application(tk.Tk):
     def download_file(self):
         path_to_save = self.input_path.get()
         link_download = self.input_download.get()
+        selected_option = self.combobox_speedlimit.get()
+        postfix = ''
+
+        if selected_option == 'B/S':
+            postfix = ''
+        elif selected_option == 'kB/S':
+            postfix = 'K'
+        elif selected_option == 'MB/S':
+            postfix = 'M'
+        elif selected_option == 'GB/S':
+            postfix = 'G'
+        else:
+            print("some error idk")
+
+        if not self.check_speedlimit():
+            print("incorrect speedlimit")  # todo show error
+            return False
+
         result = re.search(r"/([^/]+)/?$", link_download)
         if result:
             file_name = result.group(1)
-            command = ['curl', '-o', f"{path_to_save}/{file_name}", link_download]
+            command = ['curl', '--limit-rate', f"{str(self.speedlimit)}{postfix}", '-o', f"{path_to_save}/{file_name}", link_download]
             try:
                 subprocess.run(command, check=True, capture_output=True, text=True)
             except subprocess.CalledProcessError as e:
