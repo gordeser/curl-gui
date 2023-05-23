@@ -54,12 +54,9 @@ class Application(tk.Tk):
             return False
         return True
 
-    def download_file(self):
-        path_to_save = self.input_path.get()
-        link_download = self.input_download.get()
+    def get_postfix(self):
         selected_option = self.combobox_speedlimit.get()
         postfix = ''
-
         if selected_option == 'B/S':
             postfix = ''
         elif selected_option == 'kB/S':
@@ -70,6 +67,12 @@ class Application(tk.Tk):
             postfix = 'G'
         else:
             print("some error idk")
+        return postfix
+
+    def download_file(self):
+        path_to_save = self.input_path.get()
+        link_download = self.input_download.get()
+        postfix = self.get_postfix()
 
         if not self.check_speedlimit():
             print("incorrect speedlimit")  # todo show error
@@ -78,11 +81,13 @@ class Application(tk.Tk):
         result = re.search(r"/([^/]+)/?$", link_download)
         if result:
             file_name = result.group(1)
-            command = ['curl', '--limit-rate', f"{str(self.speedlimit)}{postfix}", '-o', f"{path_to_save}/{file_name}", link_download]
+            command = ['curl', '--limit-rate', f"{str(self.speedlimit)}{postfix}", '-o', f"{path_to_save}/{file_name}",
+                       link_download]
             try:
                 subprocess.run(command, check=True, capture_output=True, text=True)
             except subprocess.CalledProcessError as e:
-                print(e)  # todo for every(?) exit code make window with error https://everything.curl.dev/usingcurl/returns
+                print(
+                    e)  # todo for every(?) exit code make window with error https://everything.curl.dev/usingcurl/returns
         else:
             # todo make error with invalid link
             pass
@@ -90,19 +95,7 @@ class Application(tk.Tk):
     def upload_file(self):
         file = self.input_upload.get()
         path_to_upload = self.input_download.get()
-        selected_option = self.combobox_speedlimit.get()
-        postfix = ''
-
-        if selected_option == 'B/S':
-            postfix = ''
-        elif selected_option == 'kB/S':
-            postfix = 'K'
-        elif selected_option == 'MB/S':
-            postfix = 'M'
-        elif selected_option == 'GB/S':
-            postfix = 'G'
-        else:
-            print("some error idk")
+        postfix = self.get_postfix()
 
         if not self.check_speedlimit():
             print("incorrect speedlimit")  # todo show error
