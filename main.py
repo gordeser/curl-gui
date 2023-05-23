@@ -4,7 +4,8 @@ from tkinter import ttk
 
 import subprocess
 import re
-
+import platform
+import os
 
 class Application(tk.Tk):
 
@@ -13,7 +14,15 @@ class Application(tk.Tk):
         self.geometry("1000x500")
 
     def ask_for_directory(self):
-        filepath = filedialog.askdirectory()
+        system_name = platform.system()
+        if system_name == "Windows":
+            init_dir = os.path.expandvars("%USERPROFILE%")
+        elif system_name == "Linux" or system_name == "macOS" or system_name == "Darwin":
+            init_dir = os.path.expanduser("~")
+        else:
+            init_dir = ""
+
+        filepath = filedialog.askdirectory(initialdir=init_dir, title="Choose directory to save the file")
         if filepath:
             self.input_path.delete(0, tk.END)
             self.input_path.insert(0, filepath)
