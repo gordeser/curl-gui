@@ -39,6 +39,21 @@ class Application(tk.Tk):
             self.input_upload.delete(0, tk.END)
             self.input_upload.insert(0, filepath)
 
+    def check_speedlimit(self):
+        if not self.input_speedlimit.get():
+            self.speedlimit = 0
+            return True
+
+        try:
+            self.speedlimit = int(self.input_speedlimit.get())
+            if self.speedlimit < 0:
+                print("error speedlimit < 0")
+                return False  # todo show error with incorrect speedlimit
+        except ValueError:
+            print("error speedlimit is not int")  # todo show error with incorrect speedlimit
+            return False
+        return True
+
     def download_file(self):
         path_to_save = self.input_path.get()
         link_download = self.input_download.get()
