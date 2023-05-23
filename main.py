@@ -54,6 +54,15 @@ class Application(tk.Tk):
             # todo make error with invalid link
             pass
 
+    def upload_file(self):
+        file = self.input_upload.get()
+        path_to_upload = self.input_download.get()
+        command = ['curl', '-F', f'file=@{file}', path_to_upload]
+        try:
+            subprocess.run(command, check=True, capture_output=True, text=True)
+        except subprocess.CalledProcessError as e:
+            print(e)  # todo for every(?) exit code make window with error
+
     def set_positions(self):
         self.label_title.place(x=175, y=10)
         self.label_download_url.place(x=10, y=100)
