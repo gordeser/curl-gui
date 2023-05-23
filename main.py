@@ -18,6 +18,18 @@ class Application(tk.Tk):
             self.input_path.delete(0, tk.END)
             self.input_path.insert(0, filepath)
 
+    def download_file(self):
+        path_to_save = self.input_path.get()
+        link_download = self.input_download.get()
+        result = re.search(r"/([^/]+)/?$", link_download)
+        if result:
+            file_name = result.group(1)
+            command = ['curl', '-o', f"{path_to_save}/{file_name}", link_download]
+            subprocess.run(command, check=True)
+        else:
+            # todo make error with invalid link
+            pass
+
     def set_positions(self):
         self.label_title.place(x=175, y=10)
         self.label_download_url.place(x=10, y=100)
