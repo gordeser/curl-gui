@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from tkinter import ttk
 
 import subprocess
@@ -10,9 +10,9 @@ import os
 
 class Application(tk.Tk):
 
-    def make_window(self):
-        self.title("cURL GUI")
-        self.geometry("1000x500")
+    @staticmethod
+    def show_error(message):
+        messagebox.showerror("Error", message)
 
     @staticmethod
     def get_init_dir():
@@ -23,6 +23,10 @@ class Application(tk.Tk):
             return os.path.expanduser("~")
         else:
             return ""
+
+    def make_window(self):
+        self.title("cURL GUI")
+        self.geometry("1000x500")
 
     def ask_for_directory(self):
         init_dir = self.get_init_dir()
@@ -47,10 +51,11 @@ class Application(tk.Tk):
         try:
             self.speedlimit = int(self.input_speedlimit.get())
             if self.speedlimit < 0:
-                print("error speedlimit < 0")
-                return False  # todo show error with incorrect speedlimit
+                self.show_error("Speed limit value must be 0 or greater")
+                return False
         except ValueError:
             print("error speedlimit is not int")  # todo show error with incorrect speedlimit
+            self.show_error("Speed limit value must be a number")
             return False
         return True
 
@@ -66,7 +71,7 @@ class Application(tk.Tk):
         elif selected_option == 'GB/S':
             postfix = 'G'
         else:
-            print("some error idk")
+            self.show_error("Incorrect speed limit option")
         return postfix
 
     def download_file(self):
@@ -75,7 +80,6 @@ class Application(tk.Tk):
         postfix = self.get_postfix()
 
         if not self.check_speedlimit():
-            print("incorrect speedlimit")  # todo show error
             return False
 
         result = re.search(r"/([^/]+)/?$", link_download)
@@ -86,11 +90,9 @@ class Application(tk.Tk):
             try:
                 subprocess.run(command, check=True, capture_output=True, text=True)
             except subprocess.CalledProcessError as e:
-                print(
-                    e)  # todo for every(?) exit code make window with error https://everything.curl.dev/usingcurl/returns
+                print(e)  # todo for every(?) exit code make window with error https://everything.curl.dev/usingcurl/returns
         else:
-            # todo make error with invalid link
-            pass
+            self.show_error("Invalid URL")
 
     def upload_file(self):
         file = self.input_upload.get()
