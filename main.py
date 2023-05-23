@@ -104,13 +104,19 @@ class Application(tk.Tk):
         self.label_download_url.place(x=10, y=100)
         self.label_path_to_save.place(x=10, y=130)
         self.label_path_to_upload.place(x=10, y=160)
+        self.label_speedlimit.place(x=500, y=75)
+
         self.input_download.place(x=150, y=100)
         self.input_path.place(x=150, y=130)
         self.input_upload.place(x=150, y=160)
+        self.input_speedlimit.place(x=500, y=100)
+
         self.button_select_path.place(x=460, y=125)
         self.button_download.place(x=550, y=125)
         self.button_select_file.place(x=460, y=155)
         self.button_upload.place(x=550, y=155)
+
+        self.combobox_speedlimit.place(x=550, y=100)
 
     def set_binds(self):
         def on_entry_click_in(event):
