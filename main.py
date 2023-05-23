@@ -130,6 +130,10 @@ class Application(tk.Tk):
         self.input_download.bind("<FocusIn>", on_entry_click_in)
         self.input_download.bind("<FocusOut>", on_entry_click_out)
 
+    def set_currents(self):
+        self.combobox_speedlimit.current(0)
+        self.text_input_download.set("http://")
+
     def __init__(self):
         super().__init__()
 
