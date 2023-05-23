@@ -1,12 +1,20 @@
 import tkinter as tk
+from tkinter import filedialog
+from tkinter import ttk
+
+import subprocess
 
 
 class Application(tk.Tk):
+
+    def make_window(self):
+        self.title("cURL GUI")
+        self.geometry("1000x500")
+
     def __init__(self):
         super().__init__()
 
-        self.title("cURL GUI")
-        self.geometry("500x500")
+        self.make_window()
 
         self.label_title = tk.Label(self, text="cURL GUI", font=("Arial", 20, "bold"))
         self.label_title.place(x=175, y=10)
