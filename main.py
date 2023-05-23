@@ -40,11 +40,11 @@ class Application(tk.Tk):
         self.button_download.place(x=200, y=200)
 
     def set_binds(self):
-        def on_entry_click_in():
+        def on_entry_click_in(event):
             if self.text_input_download.get() == "http://":
                 self.text_input_download.set("")
 
-        def on_entry_click_out():
+        def on_entry_click_out(event):
             if self.text_input_download.get() == "":
                 self.text_input_download.set("http://")
 
