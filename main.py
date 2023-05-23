@@ -31,6 +31,14 @@ class Application(tk.Tk):
             self.input_path.delete(0, tk.END)
             self.input_path.insert(0, filepath)
 
+    def ask_for_file(self):
+        init_dir = self.get_init_dir()
+        filepath = filedialog.askopenfilename(initialdir=init_dir, title="Choose file to upload")
+        print(type(filepath))
+        if filepath:
+            self.input_upload.delete(0, tk.END)
+            self.input_upload.insert(0, filepath)
+
     def download_file(self):
         path_to_save = self.input_path.get()
         link_download = self.input_download.get()
