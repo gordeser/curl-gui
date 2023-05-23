@@ -66,7 +66,7 @@ class Application(tk.Tk):
         self.label_path = tk.Label(self, text="Path: ", font=("Arial", 11))
 
         # entries
-        self.input_download = tk.Entry(self, width=50, textvariable="self.text_input_download")
+        self.input_download = tk.Entry(self, width=50, textvariable=self.text_input_download)
         self.input_path = tk.Entry(self, width=50)
 
         # buttons
