@@ -7,6 +7,7 @@ import re
 import platform
 import os
 
+
 class Application(tk.Tk):
 
     def make_window(self):
@@ -34,7 +35,10 @@ class Application(tk.Tk):
         if result:
             file_name = result.group(1)
             command = ['curl', '-o', f"{path_to_save}/{file_name}", link_download]
-            subprocess.run(command, check=True)
+            try:
+                subprocess.run(command, check=True, capture_output=True, text=True)
+            except subprocess.CalledProcessError as e:
+                print(e)  # todo for every(?) exit code make window with error https://everything.curl.dev/usingcurl/returns
         else:
             # todo make error with invalid link
             pass
