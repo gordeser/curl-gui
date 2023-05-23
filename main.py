@@ -75,7 +75,25 @@ class Application(tk.Tk):
     def upload_file(self):
         file = self.input_upload.get()
         path_to_upload = self.input_download.get()
-        command = ['curl', '-F', f'file=@{file}', path_to_upload]
+        selected_option = self.combobox_speedlimit.get()
+        postfix = ''
+
+        if selected_option == 'B/S':
+            postfix = ''
+        elif selected_option == 'kB/S':
+            postfix = 'K'
+        elif selected_option == 'MB/S':
+            postfix = 'M'
+        elif selected_option == 'GB/S':
+            postfix = 'G'
+        else:
+            print("some error idk")
+
+        if not self.check_speedlimit():
+            print("incorrect speedlimit")  # todo show error
+            return False
+
+        command = ['curl', '--limit-rate', f"{str(self.speedlimit)}{postfix}", '-F', f'file=@{file}', path_to_upload]
         try:
             subprocess.run(command, check=True, capture_output=True, text=True)
         except subprocess.CalledProcessError as e:
