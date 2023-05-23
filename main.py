@@ -95,18 +95,20 @@ class Application(tk.Tk):
 
         # variables
         self.text_input_download = tk.StringVar()
-        self.text_input_download.set("http://")
+        self.speedlimit = 0
 
         # labels
         self.label_title = tk.Label(self, text="cURL GUI", font=("Arial", 20, "bold"))
         self.label_download_url = tk.Label(self, text="Download URL: ", font=("Arial", 11))
         self.label_path_to_save = tk.Label(self, text="Path to save file: ", font=("Arial", 11))
         self.label_path_to_upload = tk.Label(self, text="Path to upload file: ", font=("Arial", 11))
+        self.label_speedlimit = tk.Label(self, text="Speed limit", font=("Arial", 11))
 
         # entries
         self.input_download = tk.Entry(self, width=50, textvariable=self.text_input_download)
         self.input_path = tk.Entry(self, width=50)
         self.input_upload = tk.Entry(self, width=50)
+        self.input_speedlimit = tk.Entry(self, width=5)
 
         # buttons
         self.button_select_path = tk.Button(self, text="Choose folder", command=self.ask_for_directory)
@@ -114,9 +116,13 @@ class Application(tk.Tk):
         self.button_select_file = tk.Button(self, text="Choose file", command=self.ask_for_file)
         self.button_upload = tk.Button(self, text="Upload file", command=self.upload_file)
 
+        # combo boxes
+        self.combobox_speedlimit = ttk.Combobox(self, values=['B/S', 'kB/S', 'MB/S', 'GB/S'], width=5, state="readonly")
+
         # other set functions
         self.set_positions()
         self.set_binds()
+        self.set_currents()
 
 
 if __name__ == "__main__":
