@@ -12,6 +12,15 @@ class Application(tk.Tk):
         self.title("cURL GUI")
         self.geometry("1000x500")
 
+    def set_positions(self):
+        self.label_title.place(x=175, y=10)
+        self.label_download_url.place(x=10, y=100)
+        self.label_path.place(x=10, y=130)
+        self.input_download.place(x=150, y=100)
+        self.input_path.place(x=150, y=130)
+        self.button_select_path.place(x=460, y=125)
+        self.button_download.place(x=200, y=200)
+
     def __init__(self):
         super().__init__()
 
