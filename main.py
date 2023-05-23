@@ -14,16 +14,19 @@ class Application(tk.Tk):
         self.title("cURL GUI")
         self.geometry("1000x500")
 
-    def ask_for_directory(self):
+    @staticmethod
+    def get_init_dir():
         system_name = platform.system()
         if system_name == "Windows":
-            init_dir = os.path.expandvars("%USERPROFILE%")
+            return os.path.expandvars("%USERPROFILE%")
         elif system_name == "Linux" or system_name == "macOS" or system_name == "Darwin":
-            init_dir = os.path.expanduser("~")
+            return os.path.expanduser("~")
         else:
-            init_dir = ""
+            return ""
 
-        filepath = filedialog.askdirectory(initialdir=init_dir, title="Choose directory to save the file")
+    def ask_for_directory(self):
+        init_dir = self.get_init_dir()
+        filepath = filedialog.askdirectory(initialdir=init_dir, title="Choose directory to save file")
         if filepath:
             self.input_path.delete(0, tk.END)
             self.input_path.insert(0, filepath)
