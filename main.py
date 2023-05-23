@@ -21,6 +21,18 @@ class Application(tk.Tk):
         self.button_select_path.place(x=460, y=125)
         self.button_download.place(x=200, y=200)
 
+    def set_binds(self):
+        def on_entry_click_in():
+            if self.text_input_download.get() == "http://":
+                self.text_input_download.set("")
+
+        def on_entry_click_out():
+            if self.text_input_download.get() == "":
+                self.text_input_download.set("http://")
+
+        self.input_download.bind("<FocusIn>", on_entry_click_in)
+        self.input_download.bind("<FocusOut>", on_entry_click_out)
+
     def __init__(self):
         super().__init__()
 
