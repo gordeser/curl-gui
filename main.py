@@ -54,7 +54,6 @@ class Application(tk.Tk):
                 self.show_error("Speed limit value must be 0 or greater")
                 return False
         except ValueError:
-            print("error speedlimit is not int")  # todo show error with incorrect speedlimit
             self.show_error("Speed limit value must be a number")
             return False
         return True
@@ -100,7 +99,6 @@ class Application(tk.Tk):
         postfix = self.get_postfix()
 
         if not self.check_speedlimit():
-            print("incorrect speedlimit")  # todo show error
             return False
 
         command = ['curl', '--limit-rate', f"{str(self.speedlimit)}{postfix}", '-F', f'file=@{file}', path_to_upload]
