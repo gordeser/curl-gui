@@ -49,11 +49,15 @@ class Application(tk.Tk):
     def set_positions(self):
         self.label_title.place(x=175, y=10)
         self.label_download_url.place(x=10, y=100)
-        self.label_path.place(x=10, y=130)
+        self.label_path_to_save.place(x=10, y=130)
+        self.label_path_to_upload.place(x=10, y=160)
         self.input_download.place(x=150, y=100)
         self.input_path.place(x=150, y=130)
+        self.input_upload.place(x=150, y=160)
         self.button_select_path.place(x=460, y=125)
-        self.button_download.place(x=200, y=200)
+        self.button_download.place(x=550, y=125)
+        self.button_select_file.place(x=460, y=155)
+        self.button_upload.place(x=550, y=155)
 
     def set_binds(self):
         def on_entry_click_in(event):
@@ -79,15 +83,19 @@ class Application(tk.Tk):
         # labels
         self.label_title = tk.Label(self, text="cURL GUI", font=("Arial", 20, "bold"))
         self.label_download_url = tk.Label(self, text="Download URL: ", font=("Arial", 11))
-        self.label_path = tk.Label(self, text="Path: ", font=("Arial", 11))
+        self.label_path_to_save = tk.Label(self, text="Path to save file: ", font=("Arial", 11))
+        self.label_path_to_upload = tk.Label(self, text="Path to upload file: ", font=("Arial", 11))
 
         # entries
         self.input_download = tk.Entry(self, width=50, textvariable=self.text_input_download)
         self.input_path = tk.Entry(self, width=50)
+        self.input_upload = tk.Entry(self, width=50)
 
         # buttons
         self.button_select_path = tk.Button(self, text="Choose folder", command=self.ask_for_directory)
-        self.button_download = tk.Button(self, text="Download", width=10, command=self.download_file)
+        self.button_download = tk.Button(self, text="Download file", command=self.download_file)
+        self.button_select_file = tk.Button(self, text="Choose file", command=self.ask_for_file)
+        self.button_upload = tk.Button(self, text="Upload file", command=self.upload_file)
 
         # other set functions
         self.set_positions()
