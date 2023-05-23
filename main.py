@@ -12,6 +12,12 @@ class Application(tk.Tk):
         self.title("cURL GUI")
         self.geometry("1000x500")
 
+    def ask_for_directory(self):
+        filepath = filedialog.askdirectory()
+        if filepath:
+            self.input_path.delete(0, tk.END)
+            self.input_path.insert(0, filepath)
+
     def set_positions(self):
         self.label_title.place(x=175, y=10)
         self.label_download_url.place(x=10, y=100)
