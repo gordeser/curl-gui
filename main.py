@@ -150,6 +150,15 @@ class Application(tk.Tk):
             self.button_debug.configure(state="disabled")
             self.window_debug.protocol("WM_DELETE_WINDOW", on_close)
 
+    def set_proxy(self):
+        def on_close():
+            self.window_proxy.withdraw()
+            self.window_proxy.grab_release()
+
+        self.window_proxy.deiconify()
+        self.window_proxy.grab_set()
+        self.window_proxy.protocol("WM_DELETE_WINDOW", on_close)
+
     def set_positions(self):
         self.label_title.place(x=175, y=10)
         self.label_download_url.place(x=10, y=100)
@@ -167,6 +176,7 @@ class Application(tk.Tk):
         self.button_select_file.place(x=460, y=155)
         self.button_upload.place(x=550, y=155)
         self.button_debug.place(x=350, y=250)
+        self.button_proxy.place(x=450, y=250)
 
         self.combobox_speedlimit.place(x=550, y=100)
 
@@ -218,12 +228,14 @@ class Application(tk.Tk):
         self.button_select_file = tk.Button(self, text="Choose file", command=self.ask_for_file)
         self.button_upload = tk.Button(self, text="Upload file", command=self.upload_file)
         self.button_debug = tk.Button(self, text="Debug mode", command=self.debug_mode)
+        self.button_proxy = tk.Button(self, text="Set proxy", command=self.set_proxy)
 
         # combo boxes
         self.combobox_speedlimit = ttk.Combobox(self, values=['B/S', 'kB/S', 'MB/S', 'GB/S'], width=5, state="readonly")
 
         # windows
         self.window_debug = DebugWindow(self)
+        self.window_proxy = ProxyWindow(self)
 
         # other set functions
         self.set_positions()
@@ -262,6 +274,20 @@ class DebugWindow(tk.Toplevel):
         self.text_logs = tk.Text(self, state="disabled", width=100, height=25)
 
         self.set_positions()
+
+
+class ProxyWindow(tk.Toplevel):
+    # todo: http(s) and socks5 proxy, login, password, ip, port
+    def make_window(self):
+        self.title("Set Proxy")
+        self.geometry("300x300")
+        self.resizable(False, False)
+        self.withdraw()
+
+    def __init__(self, parent):
+        super().__init__(parent)
+
+        self.make_window()
 
 
 if __name__ == "__main__":
