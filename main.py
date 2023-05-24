@@ -1,3 +1,4 @@
+import threading
 import tkinter as tk
 from tkinter import filedialog, messagebox
 from tkinter import ttk
@@ -80,6 +81,22 @@ class Application(tk.Tk):
             self.show_error("Incorrect speed limit option")
         return postfix
 
+    def output_logs(self, process):
+        while True:
+            line = process.stdout.readline()
+            if not line:
+                break
+            self.window_debug.text_logs.config(state=tk.NORMAL)
+            self.window_debug.text_logs.insert(tk.END, line)
+            self.window_debug.text_logs.see(tk.END)
+            self.window_debug.text_logs.config(state=tk.DISABLED)
+            self.window_debug.text_logs.update()
+
+    def execute(self, command):
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        thread = threading.Thread(target=self.output_logs, args=[process])
+        thread.start()
+
     def download_file(self):
         path_to_save = self.input_path.get()
         link_download = self.input_download.get()
@@ -93,7 +110,7 @@ class Application(tk.Tk):
             file_name = result.group(1)
             command = f"curl --limit-rate {str(self.speedlimit)}{postfix} -o {path_to_save}/{file_name} {link_download}"
             try:
-                subprocess.run(command, check=True, capture_output=True, text=True)
+                self.execute(command)
             except subprocess.CalledProcessError as e:
                 # todo for every(?) exit code make window with error https://everything.curl.dev/usingcurl/returns
                 print(e)
@@ -110,7 +127,7 @@ class Application(tk.Tk):
 
         command = f"curl --limit-rate {str(self.speedlimit)}{postfix} -F file=@{file} {path_to_upload}"
         try:
-            subprocess.run(command, check=True, capture_output=True, text=True)
+            self.execute(command)
         except subprocess.CalledProcessError as e:
             print(e)  # todo for every(?) exit code make window with error
 
