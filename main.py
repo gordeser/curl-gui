@@ -107,6 +107,19 @@ class Application(tk.Tk):
         except subprocess.CalledProcessError as e:
             print(e)  # todo for every(?) exit code make window with error
 
+    def debug_mode(self):
+        def on_close():
+            self.debug_open.set(False)
+            new_window.destroy()
+
+        if not self.debug_open.get():
+            new_window = tk.Toplevel(self)
+            new_window.title("Debug mode")
+            new_window.geometry("500x500")
+            self.debug_open.set(True)
+
+            new_window.protocol("WM_DELETE_WINDOW", on_close)
+
     def set_positions(self):
         self.label_title.place(x=175, y=10)
         self.label_download_url.place(x=10, y=100)
