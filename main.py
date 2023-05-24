@@ -120,6 +120,9 @@ class Application(tk.Tk):
             self.debug_open.set(True)
             self.button_debug.configure(state="disabled")
 
+            button_verbose = ttk.Checkbutton(new_window, text="Enable verbose mode", variable=self.verbose)
+            button_verbose.place(x=20, y=460)
+
             new_window.protocol("WM_DELETE_WINDOW", on_close)
 
     def set_positions(self):
@@ -158,6 +161,7 @@ class Application(tk.Tk):
         self.combobox_speedlimit.current(0)
         self.text_input_download.set("http://")
         self.debug_open.set(False)
+        self.verbose.set(False)
 
     def __init__(self):
         super().__init__()
@@ -167,6 +171,7 @@ class Application(tk.Tk):
         # variables
         self.text_input_download = tk.StringVar()
         self.debug_open = tk.BooleanVar()
+        self.verbose = tk.BooleanVar()
         self.speedlimit = 0
 
         # labels
