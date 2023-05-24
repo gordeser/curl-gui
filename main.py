@@ -110,6 +110,7 @@ class Application(tk.Tk):
     def debug_mode(self):
         def on_close():
             self.debug_open.set(False)
+            self.button_debug.configure(state="active")
             new_window.destroy()
 
         if not self.debug_open.get():
@@ -117,6 +118,7 @@ class Application(tk.Tk):
             new_window.title("Debug mode")
             new_window.geometry("500x500")
             self.debug_open.set(True)
+            self.button_debug.configure(state="disabled")
 
             new_window.protocol("WM_DELETE_WINDOW", on_close)
 
