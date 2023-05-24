@@ -89,7 +89,8 @@ class Application(tk.Tk):
             try:
                 subprocess.run(command, check=True, capture_output=True, text=True)
             except subprocess.CalledProcessError as e:
-                print(e)  # todo for every(?) exit code make window with error https://everything.curl.dev/usingcurl/returns
+                print(
+                    e)  # todo for every(?) exit code make window with error https://everything.curl.dev/usingcurl/returns
         else:
             self.show_error("Invalid URL")
 
@@ -107,6 +108,9 @@ class Application(tk.Tk):
         except subprocess.CalledProcessError as e:
             print(e)  # todo for every(?) exit code make window with error
 
+    def export_debug(self):
+        pass  # todo
+
     def debug_mode(self):
         def on_close():
             self.debug_open.set(False)
@@ -116,12 +120,15 @@ class Application(tk.Tk):
         if not self.debug_open.get():
             new_window = tk.Toplevel(self)
             new_window.title("Debug mode")
-            new_window.geometry("500x500")
+            new_window.geometry("800x500")
             self.debug_open.set(True)
             self.button_debug.configure(state="disabled")
 
-            button_verbose = ttk.Checkbutton(new_window, text="Enable verbose mode", variable=self.verbose)
-            button_verbose.place(x=20, y=460)
+            checkbutton_verbose = ttk.Checkbutton(new_window, text="Enable verbose mode", variable=self.verbose)
+            button_export_debug = tk.Button(new_window, text="Export logs to file", command=self.export_debug)
+
+            checkbutton_verbose.place(x=20, y=460)
+            button_export_debug.place(x=650, y=460)
 
             new_window.protocol("WM_DELETE_WINDOW", on_close)
 
