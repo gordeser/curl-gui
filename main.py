@@ -27,6 +27,7 @@ class Application(tk.Tk):
     def make_window(self):
         self.title("cURL GUI")
         self.geometry("1000x500")
+        self.resizable(False, False)
 
     def ask_for_directory(self):
         init_dir = self.get_init_dir()
@@ -120,15 +121,18 @@ class Application(tk.Tk):
         if not self.debug_open.get():
             new_window = tk.Toplevel(self)
             new_window.title("Debug mode")
-            new_window.geometry("800x500")
+            new_window.geometry("805x500")
+            new_window.resizable(False, False)
             self.debug_open.set(True)
             self.button_debug.configure(state="disabled")
 
             checkbutton_verbose = ttk.Checkbutton(new_window, text="Enable verbose mode", variable=self.verbose)
             button_export_debug = tk.Button(new_window, text="Export logs to file", command=self.export_debug)
+            text_logs = tk.Text(new_window, state="disabled", width=100, height=25)
 
             checkbutton_verbose.place(x=20, y=460)
             button_export_debug.place(x=650, y=460)
+            text_logs.place(x=0, y=0)
 
             new_window.protocol("WM_DELETE_WINDOW", on_close)
 
