@@ -115,25 +115,13 @@ class Application(tk.Tk):
         def on_close():
             self.debug_open.set(False)
             self.button_debug.configure(state="active")
-            new_window.destroy()
+            self.window_debug.withdraw()
 
         if not self.debug_open.get():
-            new_window = tk.Toplevel(self)
-            new_window.title("Debug mode")
-            new_window.geometry("805x500")
-            new_window.resizable(False, False)
+            self.window_debug.deiconify()
             self.debug_open.set(True)
             self.button_debug.configure(state="disabled")
-
-            checkbutton_verbose = ttk.Checkbutton(new_window, text="Enable verbose mode", variable=self.verbose)
-            button_export_debug = tk.Button(new_window, text="Export logs to file", command=self.export_debug)
-            text_logs = tk.Text(new_window, state="disabled", width=100, height=25)
-
-            checkbutton_verbose.place(x=20, y=460)
-            button_export_debug.place(x=650, y=460)
-            text_logs.place(x=0, y=0)
-
-            new_window.protocol("WM_DELETE_WINDOW", on_close)
+            self.window_debug.protocol("WM_DELETE_WINDOW", on_close)
 
     def set_positions(self):
         self.label_title.place(x=175, y=10)
@@ -207,10 +195,37 @@ class Application(tk.Tk):
         # combo boxes
         self.combobox_speedlimit = ttk.Combobox(self, values=['B/S', 'kB/S', 'MB/S', 'GB/S'], width=5, state="readonly")
 
+        # windows
+        self.window_debug = DebugWindow(self)
+
         # other set functions
         self.set_positions()
         self.set_binds()
         self.set_currents()
+
+
+class DebugWindow(tk.Toplevel):
+
+    def make_window(self):
+        self.title("Debug mode")
+        self.geometry("805x500")
+        self.resizable(False, False)
+        self.withdraw()
+
+    def set_positions(self):
+        self.checkbutton_verbose.place(x=20, y=460)
+        self.button_export_debug.place(x=650, y=460)
+        self.text_logs.place(x=0, y=0)
+
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.make_window()
+
+        self.checkbutton_verbose = ttk.Checkbutton(self, text="Enable verbose mode", variable=parent.verbose)
+        self.button_export_debug = tk.Button(self, text="Export logs to file", command=parent.export_debug)
+        self.text_logs = tk.Text(self, state="disabled", width=100, height=25)
+
+        self.set_positions()
 
 
 if __name__ == "__main__":
