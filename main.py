@@ -123,6 +123,7 @@ class Application(tk.Tk):
         self.button_download.place(x=550, y=125)
         self.button_select_file.place(x=460, y=155)
         self.button_upload.place(x=550, y=155)
+        self.button_debug.place(x=350, y=250)
 
         self.combobox_speedlimit.place(x=550, y=100)
 
@@ -141,6 +142,7 @@ class Application(tk.Tk):
     def set_currents(self):
         self.combobox_speedlimit.current(0)
         self.text_input_download.set("http://")
+        self.debug_open.set(False)
 
     def __init__(self):
         super().__init__()
@@ -149,6 +151,7 @@ class Application(tk.Tk):
 
         # variables
         self.text_input_download = tk.StringVar()
+        self.debug_open = tk.BooleanVar()
         self.speedlimit = 0
 
         # labels
@@ -169,6 +172,7 @@ class Application(tk.Tk):
         self.button_download = tk.Button(self, text="Download file", command=self.download_file)
         self.button_select_file = tk.Button(self, text="Choose file", command=self.ask_for_file)
         self.button_upload = tk.Button(self, text="Upload file", command=self.upload_file)
+        self.button_debug = tk.Button(self, text="Debug mode", command=self.debug_mode)
 
         # combo boxes
         self.combobox_speedlimit = ttk.Combobox(self, values=['B/S', 'kB/S', 'MB/S', 'GB/S'], width=5, state="readonly")
