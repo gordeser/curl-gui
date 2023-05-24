@@ -85,13 +85,12 @@ class Application(tk.Tk):
         result = re.search(r"/([^/]+)/?$", link_download)
         if result:
             file_name = result.group(1)
-            command = ['curl', '--limit-rate', f"{str(self.speedlimit)}{postfix}", '-o', f"{path_to_save}/{file_name}",
-                       link_download]
+            command = f"curl --limit-rate {str(self.speedlimit)}{postfix} -o {path_to_save}/{file_name} {link_download}"
             try:
                 subprocess.run(command, check=True, capture_output=True, text=True)
             except subprocess.CalledProcessError as e:
-                print(
-                    e)  # todo for every(?) exit code make window with error https://everything.curl.dev/usingcurl/returns
+                # todo for every(?) exit code make window with error https://everything.curl.dev/usingcurl/returns
+                print(e)
         else:
             self.show_error("Invalid URL")
 
@@ -103,7 +102,7 @@ class Application(tk.Tk):
         if not self.check_speedlimit():
             return False
 
-        command = ['curl', '--limit-rate', f"{str(self.speedlimit)}{postfix}", '-F', f'file=@{file}', path_to_upload]
+        command = f"curl --limit-rate {str(self.speedlimit)}{postfix} -F file=@{file} {path_to_upload}"
         try:
             subprocess.run(command, check=True, capture_output=True, text=True)
         except subprocess.CalledProcessError as e:
