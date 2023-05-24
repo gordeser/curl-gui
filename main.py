@@ -6,6 +6,7 @@ import subprocess
 import re
 import platform
 import os
+import datetime
 
 
 class Application(tk.Tk):
@@ -23,6 +24,11 @@ class Application(tk.Tk):
             return os.path.expanduser("~")
         else:
             return ""
+
+    @staticmethod
+    def create_logs_directory():
+        if not os.path.exists("logs"):
+            os.makedirs("logs")
 
     def make_window(self):
         self.title("cURL GUI")
@@ -109,7 +115,11 @@ class Application(tk.Tk):
             print(e)  # todo for every(?) exit code make window with error
 
     def export_debug(self):
-        pass  # todo
+        self.create_logs_directory()
+        today = datetime.datetime.today()
+        formatted_date = today.strftime("%Y-%m-%d_%H-%M-%S")
+        with open(f"logs/log_{formatted_date}.txt", "w") as f:
+            f.write(self.window_debug.text_logs.get("1.0", "end-1c"))
 
     def debug_mode(self):
         def on_close():
