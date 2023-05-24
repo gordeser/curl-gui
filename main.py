@@ -108,7 +108,7 @@ class Application(tk.Tk):
         result = re.search(r"/([^/]+)/?$", link_download)
         if result:
             file_name = result.group(1)
-            command = f"curl {'--verbose'*int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -o {path_to_save}/{file_name} {link_download}"
+            command = f"curl {'--verbose' * int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -o {path_to_save}/{file_name} {link_download}"
             try:
                 self.execute(command)
             except subprocess.CalledProcessError as e:
@@ -125,7 +125,7 @@ class Application(tk.Tk):
         if not self.check_speedlimit():
             return False
 
-        command = f"curl {'--verbose'*int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -F file=@{file} {path_to_upload}"
+        command = f"curl {'--verbose' * int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -F file=@{file} {path_to_upload}"
         try:
             self.execute(command)
         except subprocess.CalledProcessError as e:
@@ -242,14 +242,23 @@ class DebugWindow(tk.Toplevel):
     def set_positions(self):
         self.checkbutton_verbose.place(x=20, y=460)
         self.button_export_debug.place(x=650, y=460)
+        self.button_clear_logs.place(x=350, y=460)
         self.text_logs.place(x=0, y=0)
+
+    def clear_logs(self):
+        self.text_logs.config(state=tk.NORMAL)
+        self.text_logs.delete("1.0", tk.END)
+        self.text_logs.config(state=tk.DISABLED)
 
     def __init__(self, parent):
         super().__init__(parent)
         self.make_window()
 
         self.checkbutton_verbose = ttk.Checkbutton(self, text="Enable verbose mode", variable=parent.verbose)
+
         self.button_export_debug = tk.Button(self, text="Export logs to file", command=parent.export_debug)
+        self.button_clear_logs = tk.Button(self, text="Clear logs", command=self.clear_logs)
+
         self.text_logs = tk.Text(self, state="disabled", width=100, height=25)
 
         self.set_positions()
