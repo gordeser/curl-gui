@@ -209,7 +209,7 @@ class Application(tk.Tk):
         if not self.debug_open.get():
             self.window_debug.deiconify()
             self.debug_open.set(True)
-            self.button_debug.configure(state="disabled")
+            self.button_debug.configure(state=tk.DISABLED)
             self.window_debug.protocol("WM_DELETE_WINDOW", on_close)
 
     def set_proxy(self):
@@ -232,9 +232,9 @@ class Application(tk.Tk):
 
     def set_proxy_button(self):
         if self.proxy.get():
-            self.button_proxy.configure(state="normal")
+            self.button_proxy.configure(state=tk.NORMAL)
         else:
-            self.button_proxy.configure(state="disabled")
+            self.button_proxy.configure(state=tk.DISABLED)
 
     def set_positions(self):
         self.label_title.place(x=175, y=10)
@@ -280,9 +280,9 @@ class Application(tk.Tk):
         def on_custom(event):
             selected_option = self.combobox_useragent.get()
             if selected_option == "Custom":
-                self.input_customuseragent.configure(state="normal")
+                self.input_customuseragent.configure(state=tk.NORMAL)
             else:
-                self.input_customuseragent.configure(state="disabled")
+                self.input_customuseragent.configure(state=tk.DISABLED)
 
         self.input_download.bind("<FocusIn>", on_entry_click_in)
         self.input_download.bind("<FocusOut>", on_entry_click_out)
@@ -295,7 +295,7 @@ class Application(tk.Tk):
         self.debug_open.set(False)
         self.verbose.set(False)
         self.proxy.set(False)
-        self.input_customuseragent.configure(state="disabled")
+        self.input_customuseragent.configure(state=tk.DISABLED)
 
     def __init__(self):
         super().__init__()
@@ -349,7 +349,7 @@ class Application(tk.Tk):
         self.button_select_file = tk.Button(self, text="Choose file", command=self.ask_for_file)
         self.button_upload = tk.Button(self, text="Upload file", command=self.upload_file)
         self.button_debug = tk.Button(self, text="Debug mode", command=self.debug_mode)
-        self.button_proxy = tk.Button(self, text="Set proxy", command=self.set_proxy, state="disabled")
+        self.button_proxy = tk.Button(self, text="Set proxy", command=self.set_proxy, state=tk.DISABLED)
         self.button_cookies = tk.Button(self, text="Set cookies", command=self.set_cookies)
 
         # combo boxes
@@ -398,7 +398,7 @@ class DebugWindow(tk.Toplevel):
         self.button_export_debug = tk.Button(self, text="Export logs to file", command=parent.export_debug)
         self.button_clear_logs = tk.Button(self, text="Clear logs", command=self.clear_logs)
 
-        self.text_logs = tk.Text(self, state="disabled", width=100, height=25)
+        self.text_logs = tk.Text(self, state=tk.DISABLED, width=100, height=25)
 
         self.set_positions()
 
