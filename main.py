@@ -125,7 +125,11 @@ class Application(tk.Tk):
     def get_useragent(self):
         useragent_command = ""
         selected_useragent = self.combobox_useragent.get()
-        useragent = self.useragents[selected_useragent]
+
+        if selected_useragent == "Custom":
+            useragent = self.input_customuseragent.get()
+        else:
+            useragent = self.useragents[selected_useragent]
 
         if useragent:
             useragent_command += f"-A \"{useragent}\""
@@ -243,6 +247,7 @@ class Application(tk.Tk):
         self.input_speedlimit.place(x=500, y=100)
         self.input_username.place(x=750, y=330)
         self.input_password.place(x=750, y=360)
+        self.input_customuseragent.place(x=700, y=130)
 
         self.button_select_path.place(x=460, y=125)
         self.button_download.place(x=550, y=125)
@@ -266,8 +271,16 @@ class Application(tk.Tk):
             if self.text_input_download.get() == "":
                 self.text_input_download.set("http://")
 
+        def on_custom(event):
+            selected_option = self.combobox_useragent.get()
+            if selected_option == "Custom":
+                self.input_customuseragent.configure(state="normal")
+            else:
+                self.input_customuseragent.configure(state="disabled")
+
         self.input_download.bind("<FocusIn>", on_entry_click_in)
         self.input_download.bind("<FocusOut>", on_entry_click_out)
+        self.combobox_useragent.bind("<<ComboboxSelected>>", on_custom)
 
     def set_currents(self):
         self.combobox_speedlimit.current(0)
@@ -276,6 +289,7 @@ class Application(tk.Tk):
         self.debug_open.set(False)
         self.verbose.set(False)
         self.proxy.set(False)
+        self.input_customuseragent.configure(state="disabled")
 
     def __init__(self):
         super().__init__()
@@ -300,6 +314,7 @@ class Application(tk.Tk):
             'Google Chrome / Mac OS X': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
             'Safari / Mac OS X': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15',
             'Safari / IPhone': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1',
+            'Custom': ''
         }
 
         # labels
@@ -320,6 +335,7 @@ class Application(tk.Tk):
         self.input_speedlimit = tk.Entry(self, width=5)
         self.input_username = tk.Entry(self, width=20)
         self.input_password = tk.Entry(self, width=20)
+        self.input_customuseragent = tk.Entry(self, width=50)
 
         # buttons
         self.button_select_path = tk.Button(self, text="Choose folder", command=self.ask_for_directory)
@@ -332,7 +348,7 @@ class Application(tk.Tk):
 
         # combo boxes
         self.combobox_speedlimit = ttk.Combobox(self, values=['B/S', 'kB/S', 'MB/S', 'GB/S'], width=5, state="readonly")
-        self.combobox_useragent = ttk.Combobox(self, values=list(self.useragents), width=30)
+        self.combobox_useragent = ttk.Combobox(self, values=list(self.useragents), width=30, state="readonly")
 
         # check buttons
         self.checkbutton_enable_proxy = ttk.Checkbutton(self, text="Enable proxy", variable=self.proxy)
