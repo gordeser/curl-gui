@@ -368,6 +368,13 @@ class ProxyWindow(tk.Toplevel):
     def __init__(self, parent):
         super().__init__(parent)
 
+        self.protocols = [
+            'HTTP',
+            'HTTPS',
+            'SOCKS4',
+            'SOCKS5',
+        ]
+
         self.make_window()
 
         self.label_protocol = tk.Label(self, text="Protocol")
@@ -381,7 +388,7 @@ class ProxyWindow(tk.Toplevel):
         self.input_username = tk.Entry(self, width=30)
         self.input_password = tk.Entry(self, width=30)
 
-        self.combobox_protocol = ttk.Combobox(self, values=['HTTP', 'HTTPS', 'SOCKS4', 'SOCKS5'], width=10, state="readonly")
+        self.combobox_protocol = ttk.Combobox(self, values=self.protocols, width=10, state="readonly")
 
         self.set_positions()
         self.set_currents()
