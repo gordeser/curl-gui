@@ -152,6 +152,7 @@ class Application(tk.Tk):
         proxy_command = self.get_proxy()
         useragent = self.get_useragent()
         httpbasicauth = self.get_httpbasicauth()
+        verbose = '--verbose' * int(self.verbose.get())
 
         if not self.check_speedlimit():
             return False
@@ -159,7 +160,7 @@ class Application(tk.Tk):
         result = re.search(r"/([^/]+)/?$", link_download)
         if result:
             file_name = result.group(1)
-            command = f"curl {httpbasicauth} {useragent} {proxy_command} {'--verbose' * int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -o {path_to_save}/{file_name} -L {link_download}"
+            command = f"curl {httpbasicauth} {useragent} {proxy_command} {verbose} --limit-rate {str(self.speedlimit)}{postfix} -o {path_to_save}/{file_name} -L {link_download}"
             try:
                 self.execute(command)
             except subprocess.CalledProcessError as e:
@@ -175,11 +176,12 @@ class Application(tk.Tk):
         proxy_command = self.get_proxy()
         useragent = self.get_useragent()
         httpbasicauth = self.get_httpbasicauth()
+        verbose = '--verbose' * int(self.verbose.get())
 
         if not self.check_speedlimit():
             return False
 
-        command = f"curl {httpbasicauth} {useragent} {proxy_command} {'--verbose' * int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -F file=@{file} -L {path_to_upload}"
+        command = f"curl {httpbasicauth} {useragent} {proxy_command} {verbose} --limit-rate {str(self.speedlimit)}{postfix} -F file=@{file} -L {path_to_upload}"
         try:
             self.execute(command)
         except subprocess.CalledProcessError as e:
