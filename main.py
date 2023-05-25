@@ -122,11 +122,24 @@ class Application(tk.Tk):
             proxy_command += f"--proxy-user {username}:{password}"
         return proxy_command
 
+    def get_useragent(self):
+        useragent_command = ""
+        selected_useragent = self.combobox_useragent.get()
+        useragent = self.useragents[selected_useragent]
+
+        if useragent:
+            useragent_command += f"-A \"{useragent}\""
+        else:
+            pass  # todo print some error
+
+        return useragent_command
+
     def download_file(self):
         path_to_save = self.input_path.get()
         link_download = self.input_download.get()
         postfix = self.get_postfix()
         proxy_command = self.get_proxy()
+        useragent = self.get_useragent()
 
         if not self.check_speedlimit():
             return False
@@ -134,7 +147,7 @@ class Application(tk.Tk):
         result = re.search(r"/([^/]+)/?$", link_download)
         if result:
             file_name = result.group(1)
-            command = f"curl {proxy_command} {'--verbose' * int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -o {path_to_save}/{file_name} {link_download}"
+            command = f"curl {useragent} {proxy_command} {'--verbose' * int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -o {path_to_save}/{file_name} {link_download}"
             try:
                 self.execute(command)
             except subprocess.CalledProcessError as e:
@@ -260,7 +273,7 @@ class Application(tk.Tk):
         self.label_path_to_save = tk.Label(self, text="Path to save file: ", font=("Arial", 11))
         self.label_path_to_upload = tk.Label(self, text="Path to upload file: ", font=("Arial", 11))
         self.label_speedlimit = tk.Label(self, text="Speed limit", font=("Arial", 11))
-        self.label_useragent = tk.Label(self, text="Choose custom user-agent", font=("Arial", 11))
+        self.label_useragent = tk.Label(self, text="Choose user-agent", font=("Arial", 11))
 
         # entries
         self.input_download = tk.Entry(self, width=50, textvariable=self.text_input_download)
