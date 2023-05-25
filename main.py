@@ -215,6 +215,15 @@ class Application(tk.Tk):
         self.window_proxy.grab_set()
         self.window_proxy.protocol("WM_DELETE_WINDOW", on_close)
 
+    def set_cookies(self):
+        def on_close():
+            self.window_cookies.withdraw()
+            self.window_cookies.grab_release()
+
+        self.window_cookies.deiconify()
+        self.window_cookies.grab_set()
+        self.window_cookies.protocol("WM_DELETE_WINDOW", on_close)
+
     def set_positions(self):
         self.label_title.place(x=175, y=10)
         self.label_download_url.place(x=10, y=100)
@@ -239,6 +248,7 @@ class Application(tk.Tk):
         self.button_upload.place(x=550, y=155)
         self.button_debug.place(x=350, y=250)
         self.button_proxy.place(x=450, y=250)
+        self.button_cookies.place(x=400, y=300)
 
         self.combobox_speedlimit.place(x=550, y=100)
         self.combobox_useragent.place(x=700, y=100)
@@ -316,6 +326,7 @@ class Application(tk.Tk):
         self.button_upload = tk.Button(self, text="Upload file", command=self.upload_file)
         self.button_debug = tk.Button(self, text="Debug mode", command=self.debug_mode)
         self.button_proxy = tk.Button(self, text="Set proxy", command=self.set_proxy)
+        self.button_cookies = tk.Button(self, text="Set cookies", command=self.set_cookies)
 
         # combo boxes
         self.combobox_speedlimit = ttk.Combobox(self, values=['B/S', 'kB/S', 'MB/S', 'GB/S'], width=5, state="readonly")
@@ -327,6 +338,7 @@ class Application(tk.Tk):
         # windows
         self.window_debug = DebugWindow(self)
         self.window_proxy = ProxyWindow(self)
+        self.window_cookies = CookiesWindow(self)
 
         # other set functions
         self.set_positions()
@@ -418,6 +430,20 @@ class ProxyWindow(tk.Toplevel):
 
         self.set_positions()
         self.set_currents()
+
+
+class CookiesWindow(tk.Toplevel):
+
+    def make_window(self):
+        self.title("Set cookies")
+        self.geometry("500x500")
+        self.resizable(False, False)
+        self.withdraw()
+
+    def __init__(self, parent):
+        super().__init__(parent)
+
+        self.make_window()
 
 
 if __name__ == "__main__":
