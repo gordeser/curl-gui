@@ -46,7 +46,6 @@ class Application(tk.Tk):
     def ask_for_file(self):
         init_dir = self.get_init_dir()
         filepath = filedialog.askopenfilename(initialdir=init_dir, title="Choose file to upload")
-        print(type(filepath))
         if filepath:
             self.input_upload.delete(0, tk.END)
             self.input_upload.insert(0, filepath)
@@ -97,10 +96,33 @@ class Application(tk.Tk):
         thread = threading.Thread(target=self.output_logs, args=[process])
         thread.start()
 
+    def get_proxy(self):
+        proxy_command = ""
+        protocol = ""
+
+        if self.proxy.get():
+            selected_protocol = self.window_proxy.combobox_protocol.get()
+            if selected_protocol == "HTTP":
+                protocol = "http"
+            elif selected_protocol == "SOCKS5":
+                protocol = "socks5"
+            else:
+                pass  # todo some error
+
+            hostname = self.window_proxy.input_hostname.get().replace(" ", "")
+            port = self.window_proxy.input_port.get().replace(" ", "")
+            username = self.window_proxy.input_username.get().strip()
+            password = self.window_proxy.input_password.get().strip()
+
+            proxy_command += f"--proxy {protocol}://{hostname}:{port} "
+            proxy_command += f"--proxy-user {username}:{password}"
+        return proxy_command
+
     def download_file(self):
         path_to_save = self.input_path.get()
         link_download = self.input_download.get()
         postfix = self.get_postfix()
+        proxy_command = self.get_proxy()
 
         if not self.check_speedlimit():
             return False
@@ -108,7 +130,7 @@ class Application(tk.Tk):
         result = re.search(r"/([^/]+)/?$", link_download)
         if result:
             file_name = result.group(1)
-            command = f"curl {'--verbose' * int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -o {path_to_save}/{file_name} {link_download}"
+            command = f"curl {proxy_command} {'--verbose' * int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -o {path_to_save}/{file_name} {link_download}"
             try:
                 self.execute(command)
             except subprocess.CalledProcessError as e:
@@ -121,11 +143,12 @@ class Application(tk.Tk):
         file = self.input_upload.get()
         path_to_upload = self.input_download.get()
         postfix = self.get_postfix()
+        proxy_command = self.get_proxy()
 
         if not self.check_speedlimit():
             return False
 
-        command = f"curl {'--verbose' * int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -F file=@{file} {path_to_upload}"
+        command = f"curl {proxy_command} {'--verbose' * int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -F file=@{file} {path_to_upload}"
         try:
             self.execute(command)
         except subprocess.CalledProcessError as e:
@@ -180,6 +203,8 @@ class Application(tk.Tk):
 
         self.combobox_speedlimit.place(x=550, y=100)
 
+        self.checkbutton_enable_proxy.place(x=500, y=200)
+
     def set_binds(self):
         def on_entry_click_in(event):
             if self.text_input_download.get() == "http://":
@@ -197,6 +222,7 @@ class Application(tk.Tk):
         self.text_input_download.set("http://")
         self.debug_open.set(False)
         self.verbose.set(False)
+        self.proxy.set(False)
 
     def __init__(self):
         super().__init__()
@@ -207,6 +233,7 @@ class Application(tk.Tk):
         self.text_input_download = tk.StringVar()
         self.debug_open = tk.BooleanVar()
         self.verbose = tk.BooleanVar()
+        self.proxy = tk.BooleanVar()
         self.speedlimit = 0
 
         # labels
@@ -232,6 +259,9 @@ class Application(tk.Tk):
 
         # combo boxes
         self.combobox_speedlimit = ttk.Combobox(self, values=['B/S', 'kB/S', 'MB/S', 'GB/S'], width=5, state="readonly")
+
+        # check buttons
+        self.checkbutton_enable_proxy = ttk.Checkbutton(self, text="Enable proxy", variable=self.proxy)
 
         # windows
         self.window_debug = DebugWindow(self)
