@@ -238,6 +238,7 @@ class Application(tk.Tk):
 
     def set_currents(self):
         self.combobox_speedlimit.current(0)
+        self.combobox_useragent.current(0)
         self.text_input_download.set("http://")
         self.debug_open.set(False)
         self.verbose.set(False)
@@ -255,6 +256,7 @@ class Application(tk.Tk):
         self.proxy = tk.BooleanVar()
         self.speedlimit = 0
         self.useragents = {
+            'cURL': 'curl/7.68.0',
             'Mozilla Firefox / Linux (Ubuntu)': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/112.0',
             'Mozilla Firefox / Windows 10': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0',
             'Mozilla Firefox / Windows 7': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0',
