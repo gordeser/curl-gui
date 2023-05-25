@@ -192,6 +192,7 @@ class Application(tk.Tk):
         self.label_path_to_save.place(x=10, y=130)
         self.label_path_to_upload.place(x=10, y=160)
         self.label_speedlimit.place(x=500, y=75)
+        self.label_useragent.place(x=700, y=75)
 
         self.input_download.place(x=150, y=100)
         self.input_path.place(x=150, y=130)
@@ -206,6 +207,7 @@ class Application(tk.Tk):
         self.button_proxy.place(x=450, y=250)
 
         self.combobox_speedlimit.place(x=550, y=100)
+        self.combobox_useragent.place(x=700, y=100)
 
         self.checkbutton_enable_proxy.place(x=500, y=200)
 
@@ -239,6 +241,18 @@ class Application(tk.Tk):
         self.verbose = tk.BooleanVar()
         self.proxy = tk.BooleanVar()
         self.speedlimit = 0
+        self.useragents = {
+            'Mozilla Firefox / Linux (Ubuntu)': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/112.0',
+            'Mozilla Firefox / Windows 10': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0',
+            'Mozilla Firefox / Windows 7': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0',
+            'Mozilla Firefox / Mac OS X': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 12.5; rv:102.0) Gecko/20100101 Firefox/102.0',
+            'Google Chrome / Linux': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
+            'Google Chrome / Windows 10': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36',
+            'Google Chrome / Windows 7': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36',
+            'Google Chrome / Mac OS X': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
+            'Safari / Mac OS X': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15',
+            'Safari / IPhone': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1',
+        }
 
         # labels
         self.label_title = tk.Label(self, text="cURL GUI", font=("Arial", 20, "bold"))
@@ -246,6 +260,7 @@ class Application(tk.Tk):
         self.label_path_to_save = tk.Label(self, text="Path to save file: ", font=("Arial", 11))
         self.label_path_to_upload = tk.Label(self, text="Path to upload file: ", font=("Arial", 11))
         self.label_speedlimit = tk.Label(self, text="Speed limit", font=("Arial", 11))
+        self.label_useragent = tk.Label(self, text="Choose custom user-agent", font=("Arial", 11))
 
         # entries
         self.input_download = tk.Entry(self, width=50, textvariable=self.text_input_download)
@@ -263,6 +278,7 @@ class Application(tk.Tk):
 
         # combo boxes
         self.combobox_speedlimit = ttk.Combobox(self, values=['B/S', 'kB/S', 'MB/S', 'GB/S'], width=5, state="readonly")
+        self.combobox_useragent = ttk.Combobox(self, values=list(self.useragents), width=30)
 
         # check buttons
         self.checkbutton_enable_proxy = ttk.Checkbutton(self, text="Enable proxy", variable=self.proxy)
