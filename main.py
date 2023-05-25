@@ -207,11 +207,16 @@ class Application(tk.Tk):
         self.label_path_to_upload.place(x=10, y=160)
         self.label_speedlimit.place(x=500, y=75)
         self.label_useragent.place(x=700, y=75)
+        self.label_httpbasicauth.place(x=660, y=290)
+        self.label_username.place(x=670, y=330)
+        self.label_password.place(x=670, y=360)
 
         self.input_download.place(x=150, y=100)
         self.input_path.place(x=150, y=130)
         self.input_upload.place(x=150, y=160)
         self.input_speedlimit.place(x=500, y=100)
+        self.input_username.place(x=750, y=330)
+        self.input_password.place(x=750, y=360)
 
         self.button_select_path.place(x=460, y=125)
         self.button_download.place(x=550, y=125)
@@ -277,12 +282,17 @@ class Application(tk.Tk):
         self.label_path_to_upload = tk.Label(self, text="Path to upload file: ", font=("Arial", 11))
         self.label_speedlimit = tk.Label(self, text="Speed limit", font=("Arial", 11))
         self.label_useragent = tk.Label(self, text="Choose user-agent", font=("Arial", 11))
+        self.label_httpbasicauth = tk.Label(self, text="HTTP Basic authentication", font=("Arial", 14))
+        self.label_username = tk.Label(self, text="Username", font=("Arial", 11))
+        self.label_password = tk.Label(self, text="Password", font=("Arial", 11))
 
         # entries
         self.input_download = tk.Entry(self, width=50, textvariable=self.text_input_download)
         self.input_path = tk.Entry(self, width=50)
         self.input_upload = tk.Entry(self, width=50)
         self.input_speedlimit = tk.Entry(self, width=5)
+        self.input_username = tk.Entry(self, width=20)
+        self.input_password = tk.Entry(self, width=20)
 
         # buttons
         self.button_select_path = tk.Button(self, text="Choose folder", command=self.ask_for_directory)
