@@ -161,11 +161,12 @@ class Application(tk.Tk):
         path_to_upload = self.input_download.get()
         postfix = self.get_postfix()
         proxy_command = self.get_proxy()
+        useragent = self.get_useragent()
 
         if not self.check_speedlimit():
             return False
 
-        command = f"curl {proxy_command} {'--verbose' * int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -F file=@{file} -L {path_to_upload}"
+        command = f"curl {useragent} {proxy_command} {'--verbose' * int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -F file=@{file} -L {path_to_upload}"
         try:
             self.execute(command)
         except subprocess.CalledProcessError as e:
