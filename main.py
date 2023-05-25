@@ -138,12 +138,12 @@ class Application(tk.Tk):
         username = self.input_username.get().strip()
         password = self.input_password.get().strip()
 
-        if username or password:
-            httpbasicauth_command = f"--user \"{username}:{password}\""
-        else:
-            httpbasicauth_command = ""
+        return f"--user \"{username}:{password}\"" if username or password else ""
 
-        return httpbasicauth_command
+    def get_cookies(self):
+        cookies = self.window_cookies.text_cookies.get("1.0", tk.END).split("\n")[:-1]
+        cookies = ";".join(cookies)
+        return f"--cookie \"{cookies}\"" if len(cookies) >= 1 else ""
 
     def download_file(self):
         path_to_save = self.input_path.get()
@@ -152,6 +152,7 @@ class Application(tk.Tk):
         proxy_command = self.get_proxy()
         useragent = self.get_useragent()
         httpbasicauth = self.get_httpbasicauth()
+        cookies = self.get_cookies()
         verbose = '--verbose' * int(self.verbose.get())
 
         if not self.check_speedlimit():
@@ -160,7 +161,7 @@ class Application(tk.Tk):
         result = re.search(r"/([^/]+)/?$", link_download)
         if result:
             file_name = result.group(1)
-            command = f"curl {httpbasicauth} {useragent} {proxy_command} {verbose} --limit-rate {str(self.speedlimit)}{postfix} -o {path_to_save}/{file_name} -L {link_download}"
+            command = f"curl {cookies} {httpbasicauth} {useragent} {proxy_command} {verbose} --limit-rate {str(self.speedlimit)}{postfix} -o {path_to_save}/{file_name} -L {link_download}"
             try:
                 self.execute(command)
             except subprocess.CalledProcessError as e:
@@ -176,12 +177,13 @@ class Application(tk.Tk):
         proxy_command = self.get_proxy()
         useragent = self.get_useragent()
         httpbasicauth = self.get_httpbasicauth()
+        cookies = self.get_cookies()
         verbose = '--verbose' * int(self.verbose.get())
 
         if not self.check_speedlimit():
             return False
 
-        command = f"curl {httpbasicauth} {useragent} {proxy_command} {verbose} --limit-rate {str(self.speedlimit)}{postfix} -F file=@{file} -L {path_to_upload}"
+        command = f"curl {cookies} {httpbasicauth} {useragent} {proxy_command} {verbose} --limit-rate {str(self.speedlimit)}{postfix} -F file=@{file} -L {path_to_upload}"
         try:
             self.execute(command)
         except subprocess.CalledProcessError as e:
