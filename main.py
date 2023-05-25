@@ -147,7 +147,7 @@ class Application(tk.Tk):
         result = re.search(r"/([^/]+)/?$", link_download)
         if result:
             file_name = result.group(1)
-            command = f"curl {useragent} {proxy_command} {'--verbose' * int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -o {path_to_save}/{file_name} {link_download}"
+            command = f"curl {useragent} {proxy_command} {'--verbose' * int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -o {path_to_save}/{file_name} -L {link_download}"
             try:
                 self.execute(command)
             except subprocess.CalledProcessError as e:
@@ -165,7 +165,7 @@ class Application(tk.Tk):
         if not self.check_speedlimit():
             return False
 
-        command = f"curl {proxy_command} {'--verbose' * int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -F file=@{file} {path_to_upload}"
+        command = f"curl {proxy_command} {'--verbose' * int(self.verbose.get())} --limit-rate {str(self.speedlimit)}{postfix} -F file=@{file} -L {path_to_upload}"
         try:
             self.execute(command)
         except subprocess.CalledProcessError as e:
