@@ -230,6 +230,12 @@ class Application(tk.Tk):
         self.window_cookies.grab_set()
         self.window_cookies.protocol("WM_DELETE_WINDOW", on_close)
 
+    def set_proxy_button(self):
+        if self.proxy.get():
+            self.button_proxy.configure(state="normal")
+        else:
+            self.button_proxy.configure(state="disabled")
+
     def set_positions(self):
         self.label_title.place(x=175, y=10)
         self.label_download_url.place(x=10, y=100)
@@ -343,7 +349,7 @@ class Application(tk.Tk):
         self.button_select_file = tk.Button(self, text="Choose file", command=self.ask_for_file)
         self.button_upload = tk.Button(self, text="Upload file", command=self.upload_file)
         self.button_debug = tk.Button(self, text="Debug mode", command=self.debug_mode)
-        self.button_proxy = tk.Button(self, text="Set proxy", command=self.set_proxy)
+        self.button_proxy = tk.Button(self, text="Set proxy", command=self.set_proxy, state="disabled")
         self.button_cookies = tk.Button(self, text="Set cookies", command=self.set_cookies)
 
         # combo boxes
@@ -351,7 +357,7 @@ class Application(tk.Tk):
         self.combobox_useragent = ttk.Combobox(self, values=list(self.useragents), width=30, state="readonly")
 
         # check buttons
-        self.checkbutton_enable_proxy = ttk.Checkbutton(self, text="Enable proxy", variable=self.proxy)
+        self.checkbutton_enable_proxy = ttk.Checkbutton(self, text="Enable proxy", variable=self.proxy, command=self.set_proxy_button)
 
         # windows
         self.window_debug = DebugWindow(self)
