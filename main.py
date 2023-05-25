@@ -104,6 +104,10 @@ class Application(tk.Tk):
             selected_protocol = self.window_proxy.combobox_protocol.get()
             if selected_protocol == "HTTP":
                 protocol = "http"
+            elif selected_protocol == "HTTPS":
+                protocol = "https"
+            elif selected_protocol == "SOCKS4":
+                protocol = "socks4"
             elif selected_protocol == "SOCKS5":
                 protocol = "socks5"
             else:
@@ -346,7 +350,7 @@ class ProxyWindow(tk.Toplevel):
         self.input_username = tk.Entry(self, width=30)
         self.input_password = tk.Entry(self, width=30)
 
-        self.combobox_protocol = ttk.Combobox(self, values=['HTTP', 'SOCKS5'], width=10, state="readonly")
+        self.combobox_protocol = ttk.Combobox(self, values=['HTTP', 'HTTPS', 'SOCKS4', 'SOCKS5'], width=10, state="readonly")
 
         self.set_positions()
         self.set_currents()
