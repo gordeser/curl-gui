@@ -436,14 +436,25 @@ class CookiesWindow(tk.Toplevel):
 
     def make_window(self):
         self.title("Set cookies")
-        self.geometry("500x500")
+        self.geometry("500x295")
         self.resizable(False, False)
         self.withdraw()
+
+    def set_positions(self):
+        self.label_information.place(x=10, y=10)
+
+        self.text_cookies.place(x=4, y=60)
 
     def __init__(self, parent):
         super().__init__(parent)
 
         self.make_window()
+
+        self.label_information = tk.Label(self, text="Just some text")
+
+        self.text_cookies = tk.Text(self, width=61, height=14)
+
+        self.set_positions()
 
 
 if __name__ == "__main__":
