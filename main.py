@@ -161,8 +161,16 @@ class Application(tk.Tk):
         return f"--cookie \"{cookies}\"" if len(cookies) >= 1 else ""
 
     def download_file(self):
-        path_to_save = self.input_path.get()
-        link_download = self.input_download.get()
+        link_download = self.text_input_download.get().strip()
+        if link_download == "http://":
+            self.show_error("Download URL is empty")
+            return False
+
+        path_to_save = self.input_path.get().strip()
+        if not path_to_save:
+            self.show_error("Path to save file is empty")
+            return False
+
         postfix = self.get_postfix()
 
         proxy_command = self.get_proxy()
@@ -192,8 +200,16 @@ class Application(tk.Tk):
             self.show_info("File is downloaded successfully")
 
     def upload_file(self):
-        file = self.input_upload.get()
-        path_to_upload = self.input_download.get()
+        path_to_upload = self.input_download.get().strip()
+        if path_to_upload == "http://":
+            self.show_error("Download URL is empty")
+            return False
+
+        file = self.input_upload.get().strip()
+        if not file:
+            self.show_error("Path to upload file is empty")
+            return False
+
         postfix = self.get_postfix()
 
         proxy_command = self.get_proxy()
