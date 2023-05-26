@@ -71,7 +71,6 @@ class Application(tk.Tk):
 
     def get_postfix(self):
         selected_option = self.combobox_speedlimit.get()
-        postfix = ''
         if selected_option == 'B/S':
             postfix = ''
         elif selected_option == 'kB/S':
@@ -82,6 +81,7 @@ class Application(tk.Tk):
             postfix = 'G'
         else:
             self.show_error("Incorrect speed limit option")
+            return False
         return postfix
 
     def output_logs(self, process):
@@ -104,7 +104,6 @@ class Application(tk.Tk):
 
     def get_proxy(self):
         proxy_command = ""
-        protocol = ""
 
         if self.proxy.get():
             selected_protocol = self.window_proxy.combobox_protocol.get()
@@ -117,32 +116,38 @@ class Application(tk.Tk):
             elif selected_protocol == "SOCKS5":
                 protocol = "socks5"
             else:
-                pass  # todo some error
+                self.show_error("Unknown proxy protocol")
+                return False
 
             hostname = self.window_proxy.input_hostname.get().replace(" ", "")
             port = self.window_proxy.input_port.get().replace(" ", "")
             username = self.window_proxy.input_username.get().strip()
             password = self.window_proxy.input_password.get().strip()
 
+            if not hostname or not port:
+                self.show_error("Both hostname and port in proxy are required")
+                return False
+
             proxy_command += f"--proxy {protocol}://{hostname}:{port} "
             proxy_command += f"--proxy-user {username}:{password}"
-        return proxy_command
+            return proxy_command
+        return True
 
     def get_useragent(self):
-        useragent_command = ""
         selected_useragent = self.combobox_useragent.get()
-
         if selected_useragent == "Custom":
-            useragent = self.input_customuseragent.get()
+            useragent = self.input_customuseragent.get().strip()
+            if not useragent:
+                self.show_error("User-agent is empty")
+                return False
         else:
-            useragent = self.useragents[selected_useragent]
+            return self.useragents[selected_useragent]
 
         if useragent:
-            useragent_command += f"-A \"{useragent}\""
+            return f"-A \"{useragent}\""
         else:
-            pass  # todo print some error
-
-        return useragent_command
+            self.show_error("Unknown user-agent")
+            return False
 
     def get_httpbasicauth(self):
         username = self.input_username.get().strip()
@@ -159,8 +164,15 @@ class Application(tk.Tk):
         path_to_save = self.input_path.get()
         link_download = self.input_download.get()
         postfix = self.get_postfix()
+
         proxy_command = self.get_proxy()
+        if not proxy_command:
+            return False
+
         useragent = self.get_useragent()
+        if not useragent:
+            return False
+
         httpbasicauth = self.get_httpbasicauth()
         cookies = self.get_cookies()
         verbose = '--verbose' * int(self.verbose.get())
@@ -183,8 +195,15 @@ class Application(tk.Tk):
         file = self.input_upload.get()
         path_to_upload = self.input_download.get()
         postfix = self.get_postfix()
+
         proxy_command = self.get_proxy()
+        if not proxy_command:
+            return False
+
         useragent = self.get_useragent()
+        if not useragent:
+            return False
+
         httpbasicauth = self.get_httpbasicauth()
         cookies = self.get_cookies()
         verbose = '--verbose' * int(self.verbose.get())
@@ -577,6 +596,7 @@ class CookiesWindow(tk.Toplevel):
         self.set_positions()
 
 
+# todo переместить это все нахуй по классам и отдельным файлам
 if __name__ == "__main__":
     app = Application()
     app.mainloop()
