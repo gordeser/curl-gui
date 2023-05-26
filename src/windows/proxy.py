@@ -50,7 +50,12 @@ class ProxyWindow(tk.Toplevel):
         self.input_username = tk.Entry(self, width=30)
         self.input_password = tk.Entry(self, width=30)
 
-        self.combobox_protocol = ttk.Combobox(self, values=self.protocols, width=10, state="readonly")
+        self.combobox_protocol = ttk.Combobox(
+            self,
+            values=self.protocols,
+            width=10,
+            state="readonly"
+        )
 
         self.set_positions()
         self.set_currents()

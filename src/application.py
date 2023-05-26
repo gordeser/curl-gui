@@ -17,6 +17,8 @@ from windows.proxy import ProxyWindow
 from windows.debug import DebugWindow
 from windows.cookies import CookiesWindow
 
+from constants import *
+
 
 class Application(tk.Tk):
 
@@ -27,14 +29,20 @@ class Application(tk.Tk):
 
     def ask_for_directory(self):
         init_dir = get_init_dir()
-        filepath = filedialog.askdirectory(initialdir=init_dir, title="Choose directory to save file")
+        filepath = filedialog.askdirectory(
+            initialdir=init_dir,
+            title="Choose directory to save file"
+        )
         if filepath:
             self.input_path.delete(0, tk.END)
             self.input_path.insert(0, filepath)
 
     def ask_for_file(self):
         init_dir = get_init_dir()
-        filepath = filedialog.askopenfilename(initialdir=init_dir, title="Choose file to upload")
+        filepath = filedialog.askopenfilename(
+            initialdir=init_dir,
+            title="Choose file to upload"
+        )
         if filepath:
             self.input_upload.delete(0, tk.END)
             self.input_upload.insert(0, filepath)
@@ -81,7 +89,12 @@ class Application(tk.Tk):
             self.window_debug.text_logs.update()
 
     def execute(self, command):
-        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        process = subprocess.Popen(
+            command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True
+        )
         thread = threading.Thread(target=self.output_logs, args=[process])
         thread.start()
         process.wait()
@@ -138,11 +151,14 @@ class Application(tk.Tk):
         username = self.input_username.get().strip()
         password = self.input_password.get().strip()
 
-        return f"--user \"{username}:{password}\"" if username or password else ""
+        if not username and not password:
+            return ""
+
+        return f"--user \"{username}:{password}\""
 
     def get_cookies(self):
-        cookies = self.window_cookies.text_cookies.get("1.0", tk.END).split("\n")[:-1]
-        cookies = ";".join(cookies)
+        cookies = self.window_cookies.text_cookies.get("1.0", tk.END)
+        cookies = ";".join(cookies.split("\n")[:-1])
         return f"--cookie \"{cookies}\"" if len(cookies) >= 1 else ""
 
     def download_file(self):
@@ -174,9 +190,22 @@ class Application(tk.Tk):
             return False
 
         result = re.search(r"/([^/]+)/?$", link_download)
-        file_name = result.group(1) if result else self.text_input_download.get().replace("<>:\"/\\|?*", "")
 
-        command = f"curl {cookies} {httpbasicauth} {useragent} {proxy_command} {verbose} --limit-rate {str(self.speedlimit)}{postfix} -o {path_to_save}/{file_name} -L {link_download}"
+        if result:
+            file_name = result.group(1)
+        else:
+            file_name = link_download.replace("<>:\"/\\|?*", "")
+
+        command = f"curl " \
+                  f"{cookies} " \
+                  f"{httpbasicauth} " \
+                  f"{useragent} " \
+                  f"{proxy_command} " \
+                  f"{verbose} " \
+                  f"--limit-rate {str(self.speedlimit)}{postfix} " \
+                  f"-o {path_to_save}/{file_name} " \
+                  f"-L " \
+                  f"{link_download}"
         returncode = self.execute(command)
         message = self.errors[returncode]
         if message:
@@ -212,7 +241,16 @@ class Application(tk.Tk):
         if not self.check_speedlimit():
             return False
 
-        command = f"curl {cookies} {httpbasicauth} {useragent} {proxy_command} {verbose} --limit-rate {str(self.speedlimit)}{postfix} -F file=@{file} -L {path_to_upload}"
+        command = f"curl " \
+                  f"{cookies} " \
+                  f"{httpbasicauth} " \
+                  f"{useragent} " \
+                  f"{proxy_command} " \
+                  f"{verbose} " \
+                  f"--limit-rate {str(self.speedlimit)}{postfix} " \
+                  f"-F file=@{file} " \
+                  f"-L " \
+                  f"{path_to_upload}"
         returncode = self.execute(command)
         message = self.errors[returncode]
         if message:
@@ -341,119 +379,54 @@ class Application(tk.Tk):
         self.proxy = tk.BooleanVar()
         self.path = tk.StringVar()
         self.speedlimit = 0
-        self.useragents = {
-            'cURL': 'curl/7.68.0',
-            'Mozilla Firefox / Linux (Ubuntu)': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/112.0',
-            'Mozilla Firefox / Windows 10': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0',
-            'Mozilla Firefox / Windows 7': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0',
-            'Mozilla Firefox / Mac OS X': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 12.5; rv:102.0) Gecko/20100101 Firefox/102.0',
-            'Google Chrome / Linux': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
-            'Google Chrome / Windows 10': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36',
-            'Google Chrome / Windows 7': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36',
-            'Google Chrome / Mac OS X': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
-            'Safari / Mac OS X': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15',
-            'Safari / IPhone': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1',
-            'Custom': ''
-        }
-        self.errors = {  # are taken from https://gist.github.com/gitkodak/b9c253e89397335356b13b37985778f5
-            0: "",
-            1: "Unsupported protocol. This build of curl has no support for this protocol.",
-            2: "Failed to initialize.",
-            3: "URL malformed. The syntax was not correct.",
-            4: "A feature or option that was needed to perform the desired request was not enabled or was explicitly disabled at build-time. To make curl able to do this, you probably need another build of libcurl!",
-            5: "Couldn't resolve proxy. The given proxy host could not be resolved.",
-            6: "Couldn't resolve host. The given remote host was not resolved.",
-            7: "Failed to connect to host.",
-            8: "Weird server reply. The server sent data curl couldn't parse.",
-            9: "FTP access denied. The server denied login or denied access to the particular resource or directory you wanted to reach. Most often you tried to change to a directory that doesn't exist on the server.",
-            10: "FTP accept failed. While waiting for the server to connect back when an active FTP session is used, an error code was sent over the control connection or similar.",
-            11: "FTP weird PASS reply. Curl couldn't parse the reply sent to the PASS request.",
-            12: "During an active FTP session while waiting for the server to connect back to curl, the timeout expired.",
-            13: "FTP weird PASV reply, Curl couldn't parse the reply sent to the PASV request.",
-            14: "FTP weird 227 format. Curl couldn't parse the 227-line the server sent.",
-            15: "FTP can't get host. Couldn't resolve the host IP we got in the 227-line.",
-            16: "HTTP/2 error. A problem was detected in the HTTP2 framing layer. This is somewhat generic and can be one out of several problems, see the error message for details.",
-            17: "FTP couldn't set binary. Couldn't change transfer method to binary.",
-            18: "Partial file. Only a part of the file was transferred.",
-            19: "FTP couldn't download/access the given file, the RETR (or similar) command failed.",
-            21: "FTP quote error. A quote command returned error from the server.",
-            22: "HTTP page not retrieved. The requested url was not found or returned another error with the HTTP error code being 400 or above. This return code only appears if -f, --fail is used.",
-            23: "Write error. Curl couldn't write data to a local filesystem or similar.",
-            25: "FTP couldn't STOR file. The server denied the STOR operation, used for FTP uploading.",
-            26: "Read error. Various reading problems.",
-            27: "Out of memory. A memory allocation request failed.",
-            28: "Operation timeout. The specified time-out period was reached according to the conditions.",
-            30: "FTP PORT failed. The PORT command failed. Not all FTP servers support the PORT command, try doing a transfer using PASV instead!",
-            31: "FTP couldn't use REST. The REST command failed. This command is used for resumed FTP transfers.",
-            33: "HTTP range error. The range \"command\" didn't work.",
-            34: "HTTP post error. Internal post-request generation error.",
-            35: "SSL connect error. The SSL handshaking failed.",
-            36: "Bad download resume. Couldn't continue an earlier aborted download.",
-            37: "FILE couldn't read file. Failed to open the file. Permissions?",
-            38: "LDAP cannot bind. LDAP bind operation failed.",
-            39: "LDAP search failed.",
-            41: "Function not found. A required LDAP function was not found.",
-            42: "Aborted by callback. An application told curl to abort the operation.",
-            43: "Internal error. A function was called with a bad parameter.",
-            45: "Interface error. A specified outgoing interface could not be used.",
-            47: "Too many redirects. When following redirects, curl hit the maximum amount.",
-            48: "Unknown option specified to libcurl. This indicates that you passed a weird option to curl that was passed on to libcurl and rejected. Read up in the manual!",
-            49: "Malformed telnet option.",
-            51: "The peer's SSL certificate or SSH MD5 fingerprint was not OK.",
-            52: "The server didn't reply anything, which here is considered an error.",
-            53: "SSL crypto engine not found.",
-            54: "Cannot set SSL crypto engine as default.",
-            55: "Failed sending network data.",
-            56: "Failure in receiving network data.",
-            58: "Problem with the local certificate.",
-            59: "Couldn't use specified SSL cipher.",
-            60: "Peer certificate cannot be authenticated with known CA certificates.",
-            61: "Unrecognized transfer encoding.",
-            62: "Invalid LDAP URL.",
-            63: "Maximum file size exceeded.",
-            64: "Requested FTP SSL level failed.",
-            65: "Sending the data requires a rewind that failed.",
-            66: "Failed to initialise SSL Engine.",
-            67: "The user name, password, or similar was not accepted and curl failed to log in.",
-            68: "File not found on TFTP server.",
-            69: "Permission problem on TFTP server.",
-            70: "Out of disk space on TFTP server.",
-            71: "Illegal TFTP operation.",
-            72: "Unknown TFTP transfer ID.",
-            73: "File already exists (TFTP).",
-            74: "No such user (TFTP).",
-            75: "Character conversion failed.",
-            76: "Character conversion functions required.",
-            77: "Problem with reading the SSL CA cert (path? access rights?).",
-            78: "The resource referenced in the URL does not exist.  ",
-            79: "An unspecified error occurred during the SSH session.",
-            80: "Failed to shut down the SSL connection.",
-            82: "Could not load CRL file, missing or wrong format (added in 7.19.0).",
-            83: "Issuer check failed (added in 7.19.0).",
-            84: "The FTP PRET command failed",
-            85: "RTSP: mismatch of CSeq numbers",
-            86: "RTSP: mismatch of Session Identifiers",
-            87: "unable to parse FTP file list",
-            88: "FTP chunk callback reported error",
-            89: "No connection available, the session will be queued",
-            90: "SSL public key does not matched pinned public key",
-            91: "Invalid SSL certificate status.",
-            92: "Stream error in HTTP/2 framing layer."
-        }
+        self.useragents = USERAGENTS
+        self.errors = ERRORS
 
         # labels
-        self.label_title = tk.Label(self, text="cURL GUI", font=("Arial", 20, "bold"))
-        self.label_download_url = tk.Label(self, text="Download URL: ", font=("Arial", 11))
-        self.label_path_to_save = tk.Label(self, text="Path to save file: ", font=("Arial", 11))
-        self.label_path_to_upload = tk.Label(self, text="Path to upload file: ", font=("Arial", 11))
-        self.label_speedlimit = tk.Label(self, text="Speed limit", font=("Arial", 11))
-        self.label_useragent = tk.Label(self, text="Choose user-agent", font=("Arial", 11))
-        self.label_httpbasicauth = tk.Label(self, text="HTTP Basic authentication", font=("Arial", 14))
-        self.label_username = tk.Label(self, text="Username", font=("Arial", 11))
-        self.label_password = tk.Label(self, text="Password", font=("Arial", 11))
+        self.label_title = tk.Label(
+            self,
+            text="cURL GUI",
+            font=FONT_HEADER
+        )
+        self.label_download_url = tk.Label(
+            self,
+            text="Download URL: ",
+            font=FONT_TEXT
+        )
+        self.label_path_to_save = tk.Label(
+            self,
+            text="Path to save file: ",
+            font=FONT_TEXT
+        )
+        self.label_path_to_upload = tk.Label(
+            self,
+            text="Path to upload file: ",
+            font=FONT_TEXT
+        )
+        self.label_speedlimit = tk.Label(
+            self,
+            text="Speed limit",
+            font=FONT_TEXT
+        )
+        self.label_useragent = tk.Label(
+            self,
+            text="Choose user-agent",
+            font=FONT_TEXT
+        )
+        self.label_httpbasicauth = tk.Label(
+            self,
+            text="HTTP Basic authentication",
+            font=FONT_SECTION
+        )
+        self.label_username = tk.Label(self, text="Username", font=FONT_TEXT)
+        self.label_password = tk.Label(self, text="Password", font=FONT_TEXT)
 
         # entries
-        self.input_download = tk.Entry(self, width=50, textvariable=self.text_input_download)
+        self.input_download = tk.Entry(
+            self,
+            width=50,
+            textvariable=self.text_input_download
+        )
         self.input_path = tk.Entry(self, width=50, textvariable=self.path)
         self.input_upload = tk.Entry(self, width=50, textvariable=self.path)
         self.input_speedlimit = tk.Entry(self, width=5)
@@ -462,21 +435,64 @@ class Application(tk.Tk):
         self.input_customuseragent = tk.Entry(self, width=50)
 
         # buttons
-        self.button_select_path = tk.Button(self, text="Choose folder", command=self.ask_for_directory)
-        self.button_download = tk.Button(self, text="Download file", command=self.download_file)
-        self.button_select_file = tk.Button(self, text="Choose file", command=self.ask_for_file)
-        self.button_upload = tk.Button(self, text="Upload file", command=self.upload_file)
-        self.button_debug = tk.Button(self, text="Debug mode", command=self.debug_mode)
-        self.button_proxy = tk.Button(self, text="Set proxy", command=self.set_proxy, state=tk.DISABLED)
-        self.button_cookies = tk.Button(self, text="Set cookies", command=self.set_cookies)
+        self.button_select_path = tk.Button(
+            self,
+            text="Choose folder",
+            command=self.ask_for_directory
+        )
+        self.button_download = tk.Button(
+            self,
+            text="Download file",
+            command=self.download_file
+        )
+        self.button_select_file = tk.Button(
+            self,
+            text="Choose file",
+            command=self.ask_for_file
+        )
+        self.button_upload = tk.Button(
+            self,
+            text="Upload file",
+            command=self.upload_file
+        )
+        self.button_debug = tk.Button(
+            self,
+            text="Debug mode",
+            command=self.debug_mode
+        )
+        self.button_proxy = tk.Button(
+            self,
+            text="Set proxy",
+            command=self.set_proxy,
+            state=tk.DISABLED
+        )
+        self.button_cookies = tk.Button(
+            self,
+            text="Set cookies",
+            command=self.set_cookies
+        )
 
         # combo boxes
-        self.combobox_speedlimit = ttk.Combobox(self, values=['B/S', 'kB/S', 'MB/S', 'GB/S'], width=5, state="readonly")
-        self.combobox_useragent = ttk.Combobox(self, values=list(self.useragents), width=30, state="readonly")
+        self.combobox_speedlimit = ttk.Combobox(
+            self,
+            values=['B/S', 'kB/S', 'MB/S', 'GB/S'],
+            width=5,
+            state="readonly"
+        )
+        self.combobox_useragent = ttk.Combobox(
+            self,
+            values=list(self.useragents),
+            width=30,
+            state="readonly"
+        )
 
         # check buttons
-        self.checkbutton_enable_proxy = ttk.Checkbutton(self, text="Enable proxy", variable=self.proxy,
-                                                        command=self.set_proxy_button)
+        self.checkbutton_enable_proxy = ttk.Checkbutton(
+            self,
+            text="Enable proxy",
+            variable=self.proxy,
+            command=self.set_proxy_button
+        )
 
         # windows
         self.window_debug = DebugWindow(self)

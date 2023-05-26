@@ -19,7 +19,12 @@ class CookiesWindow(tk.Toplevel):
 
         self.make_window()
 
-        self.label_information = tk.Label(self, text="Write your cookies in format cookie1=value1 \n Divide cookies by new line", font=("Arial", 14))
+        self.label_information = tk.Label(
+            self,
+            text="Write your cookies in format cookie1=value1 \n "
+                 "Divide cookies by new line",
+            font=("Arial", 14)
+        )
 
         self.text_cookies = tk.Text(self, width=48, height=14)
 

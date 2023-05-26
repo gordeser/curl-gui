@@ -26,10 +26,22 @@ class DebugWindow(tk.Toplevel):
         super().__init__(parent)
         self.make_window()
 
-        self.checkbutton_verbose = ttk.Checkbutton(self, text="Enable verbose mode", variable=parent.verbose)
+        self.checkbutton_verbose = ttk.Checkbutton(
+            self,
+            text="Enable verbose mode",
+            variable=parent.verbose
+        )
 
-        self.button_export_debug = tk.Button(self, text="Export logs to file", command=parent.export_debug)
-        self.button_clear_logs = tk.Button(self, text="Clear logs", command=self.clear_logs)
+        self.button_export_debug = tk.Button(
+            self,
+            text="Export logs to file",
+            command=parent.export_debug
+        )
+        self.button_clear_logs = tk.Button(
+            self,
+            text="Clear logs",
+            command=self.clear_logs
+        )
 
         self.text_logs = tk.Text(self, state=tk.DISABLED, width=100, height=25)
 
