@@ -341,6 +341,8 @@ class Application(tk.Tk):
         self.verbose.set(False)
         self.proxy.set(False)
         self.input_customuseragent.configure(state=tk.DISABLED)
+        self.input_path.configure()
+        self.path.set(self.get_init_dir())
 
     def __init__(self):
         super().__init__()
@@ -352,6 +354,7 @@ class Application(tk.Tk):
         self.debug_open = tk.BooleanVar()
         self.verbose = tk.BooleanVar()
         self.proxy = tk.BooleanVar()
+        self.path = tk.StringVar()
         self.speedlimit = 0
         self.useragents = {
             'cURL': 'curl/7.68.0',
@@ -466,8 +469,8 @@ class Application(tk.Tk):
 
         # entries
         self.input_download = tk.Entry(self, width=50, textvariable=self.text_input_download)
-        self.input_path = tk.Entry(self, width=50)
-        self.input_upload = tk.Entry(self, width=50)
+        self.input_path = tk.Entry(self, width=50, textvariable=self.path)
+        self.input_upload = tk.Entry(self, width=50, textvariable=self.path)
         self.input_speedlimit = tk.Entry(self, width=5)
         self.input_username = tk.Entry(self, width=20)
         self.input_password = tk.Entry(self, width=20)
