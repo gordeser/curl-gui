@@ -17,6 +17,10 @@ class Application(tk.Tk):
         messagebox.showerror("Error", message)
 
     @staticmethod
+    def show_info(message):
+        messagebox.showinfo("Information", message)
+
+    @staticmethod
     def get_init_dir():
         system_name = platform.system()
         if system_name == "Windows":
@@ -168,6 +172,7 @@ class Application(tk.Tk):
             command = f"curl {cookies} {httpbasicauth} {useragent} {proxy_command} {verbose} --limit-rate {str(self.speedlimit)}{postfix} -o {path_to_save}/{file_name} -L {link_download}"
             try:
                 self.execute(command)
+                self.show_info("File is downloaded successfully")
             except subprocess.CalledProcessError as e:
                 # todo for every(?) exit code make window with error https://everything.curl.dev/usingcurl/returns
                 print(e)
@@ -190,6 +195,7 @@ class Application(tk.Tk):
         command = f"curl {cookies} {httpbasicauth} {useragent} {proxy_command} {verbose} --limit-rate {str(self.speedlimit)}{postfix} -F file=@{file} -L {path_to_upload}"
         try:
             self.execute(command)
+            self.show_info("File is uploaded successfully")
         except subprocess.CalledProcessError as e:
             print(e)  # todo for every(?) exit code make window with error
 
@@ -199,6 +205,7 @@ class Application(tk.Tk):
         formatted_date = today.strftime("%Y-%m-%d_%H-%M-%S")
         with open(f"logs/log_{formatted_date}.txt", "w") as f:
             f.write(self.window_debug.text_logs.get("1.0", "end-1c"))
+            self.show_info("Logs are exported successfully")
 
     def debug_mode(self):
         def on_close():
@@ -216,6 +223,7 @@ class Application(tk.Tk):
         def on_close():
             self.window_proxy.withdraw()
             self.window_proxy.grab_release()
+            self.show_info("Proxy is set successfully")
 
         self.window_proxy.deiconify()
         self.window_proxy.grab_set()
@@ -225,6 +233,7 @@ class Application(tk.Tk):
         def on_close():
             self.window_cookies.withdraw()
             self.window_cookies.grab_release()
+            self.show_info("Cookies are set successfully")
 
         self.window_cookies.deiconify()
         self.window_cookies.grab_set()
