@@ -1,14 +1,11 @@
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from tkinter import ttk
 
 import threading
 import subprocess
 import re
 import datetime
-
-from src.messages import show_error
-from src.messages import show_info
 
 from src.utils import get_init_dir
 from src.utils import create_logs_directory
@@ -21,6 +18,14 @@ from src.constants import *
 
 
 class Application(tk.Tk):
+
+    @staticmethod
+    def show_error(message):
+        messagebox.showerror("Error", message)
+
+    @staticmethod
+    def show_info(message):
+        messagebox.showinfo("Information", message)
 
     def make_window(self):
         self.title("cURL GUI")
@@ -55,10 +60,10 @@ class Application(tk.Tk):
         try:
             self.speedlimit = int(self.input_speedlimit.get())
             if self.speedlimit < 0:
-                show_error("Speed limit value must be 0 or greater")
+                self.show_error("Speed limit value must be 0 or greater")
                 return False
         except ValueError:
-            show_error("Speed limit value must be a number")
+            self.show_error("Speed limit value must be a number")
             return False
         return True
 
@@ -73,7 +78,7 @@ class Application(tk.Tk):
         elif selected_option == 'GB/S':
             postfix = 'G'
         else:
-            show_error("Incorrect speed limit option")
+            self.show_error("Incorrect speed limit option")
             return False
         return postfix
 
@@ -114,7 +119,7 @@ class Application(tk.Tk):
             elif selected_protocol == "SOCKS5":
                 protocol = "socks5"
             else:
-                show_error("Unknown proxy protocol")
+                self.show_error("Unknown proxy protocol")
                 return False
 
             hostname = self.window_proxy.input_hostname.get().replace(" ", "")
@@ -123,7 +128,7 @@ class Application(tk.Tk):
             password = self.window_proxy.input_password.get().strip()
 
             if not hostname or not port:
-                show_error("Both hostname and port in proxy are required")
+                self.show_error("Both hostname and port in proxy are required")
                 return False
 
             proxy_command += f"--proxy {protocol}://{hostname}:{port} "
@@ -136,7 +141,7 @@ class Application(tk.Tk):
         if selected_useragent == "Custom":
             useragent = self.input_customuseragent.get().strip()
             if not useragent:
-                show_error("User-agent is empty")
+                self.show_error("User-agent is empty")
                 return False
         else:
             return f"-A \"{self.useragents[selected_useragent]}\""
@@ -144,7 +149,7 @@ class Application(tk.Tk):
         if useragent:
             return f"-A \"{useragent}\""
         else:
-            show_error("Unknown user-agent")
+            self.show_error("Unknown user-agent")
             return False
 
     def get_httpbasicauth(self):
@@ -164,12 +169,12 @@ class Application(tk.Tk):
     def download_file(self):
         link_download = self.text_input_download.get().strip()
         if link_download == "http://":
-            show_error("Download URL is empty")
+            self.show_error("Download URL is empty")
             return False
 
         path_to_save = self.input_path.get().strip()
         if not path_to_save:
-            show_error("Path to save file is empty")
+            self.show_error("Path to save file is empty")
             return False
 
         postfix = self.get_postfix()
@@ -209,19 +214,19 @@ class Application(tk.Tk):
         returncode = self.execute(command)
         message = self.errors[returncode]
         if message:
-            show_error(message)
+            self.show_error(message)
         else:
-            show_info("File is downloaded successfully")
+            self.show_info("File is downloaded successfully")
 
     def upload_file(self):
         path_to_upload = self.input_download.get().strip()
         if path_to_upload == "http://":
-            show_error("Download URL is empty")
+            self.show_error("Download URL is empty")
             return False
 
         file = self.input_upload.get().strip()
         if not file:
-            show_error("Path to upload file is empty")
+            self.show_error("Path to upload file is empty")
             return False
 
         postfix = self.get_postfix()
@@ -254,9 +259,9 @@ class Application(tk.Tk):
         returncode = self.execute(command)
         message = self.errors[returncode]
         if message:
-            show_error(message)
+            self.show_error(message)
         else:
-            show_info("File is downloaded successfully")
+            self.show_info("File is downloaded successfully")
 
     def export_debug(self):
         create_logs_directory()
@@ -264,7 +269,7 @@ class Application(tk.Tk):
         formatted_date = today.strftime("%Y-%m-%d_%H-%M-%S")
         with open(f"../logs/log_{formatted_date}.txt", "w") as f:
             f.write(self.window_debug.text_logs.get("1.0", "end-1c"))
-            show_info("Logs are exported successfully")
+            self.show_info("Logs are exported successfully")
 
     def debug_mode(self):
         def on_close():
@@ -282,7 +287,7 @@ class Application(tk.Tk):
         def on_close():
             self.window_proxy.withdraw()
             self.window_proxy.grab_release()
-            show_info("Proxy is set successfully")
+            self.show_info("Proxy is set successfully")
 
         self.window_proxy.deiconify()
         self.window_proxy.grab_set()
@@ -292,7 +297,7 @@ class Application(tk.Tk):
         def on_close():
             self.window_cookies.withdraw()
             self.window_cookies.grab_release()
-            show_info("Cookies are set successfully")
+            self.show_info("Cookies are set successfully")
 
         self.window_cookies.deiconify()
         self.window_cookies.grab_set()
@@ -365,7 +370,8 @@ class Application(tk.Tk):
         self.proxy.set(False)
         self.input_customuseragent.configure(state=tk.DISABLED)
         self.input_path.configure()
-        self.path.set(get_init_dir())
+        self.path_download.set(get_init_dir())
+        self.path_upload.set(get_init_dir())
 
     def __init__(self):
         super().__init__()
@@ -377,7 +383,8 @@ class Application(tk.Tk):
         self.debug_open = tk.BooleanVar()
         self.verbose = tk.BooleanVar()
         self.proxy = tk.BooleanVar()
-        self.path = tk.StringVar()
+        self.path_download = tk.StringVar()
+        self.path_upload = tk.StringVar()
         self.speedlimit = 0
         self.useragents = USERAGENTS
         self.errors = ERRORS
@@ -427,8 +434,16 @@ class Application(tk.Tk):
             width=50,
             textvariable=self.text_input_download
         )
-        self.input_path = ttk.Entry(self, width=50, textvariable=self.path)
-        self.input_upload = ttk.Entry(self, width=50, textvariable=self.path)
+        self.input_path = ttk.Entry(
+            self,
+            width=50,
+            textvariable=self.path_download
+        )
+        self.input_upload = ttk.Entry(
+            self,
+            width=50,
+            textvariable=self.path_upload
+        )
         self.input_speedlimit = ttk.Entry(self, width=5)
         self.input_username = ttk.Entry(self, width=20)
         self.input_password = ttk.Entry(self, width=20)

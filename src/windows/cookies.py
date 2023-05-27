@@ -2,6 +2,7 @@ import tkinter as tk
 
 from tkinter import ttk
 
+
 class CookiesWindow(tk.Toplevel):
 
     def make_window(self):
