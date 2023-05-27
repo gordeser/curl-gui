@@ -541,6 +541,8 @@ class ButtonDebugTestCase(unittest.TestCase):
             file_text = f.read()
             self.assertEqual(check_text[:-1], file_text)
 
+        os.remove(filename)
+
 
 class ComboboxApplicationTestCase(unittest.TestCase):
     def setUp(self):
