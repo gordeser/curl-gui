@@ -314,7 +314,7 @@ class Application(tk.Tk):
         self.label_download_url.place(x=57, y=80)
         self.label_path_to_save.place(x=22, y=130)
         self.label_path_to_upload.place(x=10, y=160)
-        self.label_speedlimit.place(x=400, y=340)
+        self.label_speedlimit.place(x=300, y=340)
         self.label_useragent.place(x=40, y=260)
         self.label_httpbasicauth.place(x=40, y=340)
         self.label_username.place(x=40, y=370)
@@ -323,7 +323,7 @@ class Application(tk.Tk):
         self.input_download.place(x=140, y=80)
         self.input_path.place(x=140, y=130)
         self.input_upload.place(x=140, y=160)
-        self.input_speedlimit.place(x=400, y=380)
+        self.input_speedlimit.place(x=300, y=370)
         self.input_username.place(x=130, y=370)
         self.input_password.place(x=130, y=400)
         self.input_customuseragent.place(x=250, y=290)
@@ -336,7 +336,7 @@ class Application(tk.Tk):
         self.button_proxy.place(x=135, y=210)
         self.button_cookies.place(x=370, y=210)
 
-        self.combobox_speedlimit.place(x=450, y=380)
+        self.combobox_speedlimit.place(x=350, y=370)
         self.combobox_useragent.place(x=40, y=290)
 
         self.checkbutton_enable_proxy.place(x=40, y=210)
