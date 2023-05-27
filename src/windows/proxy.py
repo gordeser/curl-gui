@@ -39,16 +39,16 @@ class ProxyWindow(tk.Toplevel):
 
         self.make_window()
 
-        self.label_protocol = tk.Label(self, text="Protocol")
-        self.label_hostname = tk.Label(self, text="Hostname")
-        self.label_port = tk.Label(self, text="Port")
-        self.label_username = tk.Label(self, text="Username")
-        self.label_password = tk.Label(self, text="Password")
+        self.label_protocol = ttk.Label(self, text="Protocol")
+        self.label_hostname = ttk.Label(self, text="Hostname")
+        self.label_port = ttk.Label(self, text="Port")
+        self.label_username = ttk.Label(self, text="Username")
+        self.label_password = ttk.Label(self, text="Password")
 
-        self.input_hostname = tk.Entry(self, width=30)
-        self.input_port = tk.Entry(self, width=30)
-        self.input_username = tk.Entry(self, width=30)
-        self.input_password = tk.Entry(self, width=30)
+        self.input_hostname = ttk.Entry(self, width=30)
+        self.input_port = ttk.Entry(self, width=30)
+        self.input_username = ttk.Entry(self, width=30)
+        self.input_password = ttk.Entry(self, width=30)
 
         self.combobox_protocol = ttk.Combobox(
             self,

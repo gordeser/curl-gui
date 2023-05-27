@@ -7,17 +7,17 @@ import subprocess
 import re
 import datetime
 
-from messages import show_error
-from messages import show_info
+from src.messages import show_error
+from src.messages import show_info
 
-from utils import get_init_dir
-from utils import create_logs_directory
+from src.utils import get_init_dir
+from src.utils import create_logs_directory
 
-from windows.proxy import ProxyWindow
-from windows.debug import DebugWindow
-from windows.cookies import CookiesWindow
+from src.windows.proxy import ProxyWindow
+from src.windows.debug import DebugWindow
+from src.windows.cookies import CookiesWindow
 
-from constants import *
+from src.constants import *
 
 
 class Application(tk.Tk):
@@ -383,90 +383,90 @@ class Application(tk.Tk):
         self.errors = ERRORS
 
         # labels
-        self.label_title = tk.Label(
+        self.label_title = ttk.Label(
             self,
             text="cURL GUI",
             font=FONT_HEADER
         )
-        self.label_download_url = tk.Label(
+        self.label_download_url = ttk.Label(
             self,
             text="Download URL: ",
             font=FONT_TEXT
         )
-        self.label_path_to_save = tk.Label(
+        self.label_path_to_save = ttk.Label(
             self,
             text="Path to save file: ",
             font=FONT_TEXT
         )
-        self.label_path_to_upload = tk.Label(
+        self.label_path_to_upload = ttk.Label(
             self,
             text="Path to upload file: ",
             font=FONT_TEXT
         )
-        self.label_speedlimit = tk.Label(
+        self.label_speedlimit = ttk.Label(
             self,
             text="Speed limit",
             font=FONT_TEXT
         )
-        self.label_useragent = tk.Label(
+        self.label_useragent = ttk.Label(
             self,
             text="Choose user-agent",
             font=FONT_TEXT
         )
-        self.label_httpbasicauth = tk.Label(
+        self.label_httpbasicauth = ttk.Label(
             self,
             text="HTTP Basic authentication",
             font=FONT_SECTION
         )
-        self.label_username = tk.Label(self, text="Username", font=FONT_TEXT)
-        self.label_password = tk.Label(self, text="Password", font=FONT_TEXT)
+        self.label_username = ttk.Label(self, text="Username", font=FONT_TEXT)
+        self.label_password = ttk.Label(self, text="Password", font=FONT_TEXT)
 
         # entries
-        self.input_download = tk.Entry(
+        self.input_download = ttk.Entry(
             self,
             width=50,
             textvariable=self.text_input_download
         )
-        self.input_path = tk.Entry(self, width=50, textvariable=self.path)
-        self.input_upload = tk.Entry(self, width=50, textvariable=self.path)
-        self.input_speedlimit = tk.Entry(self, width=5)
-        self.input_username = tk.Entry(self, width=20)
-        self.input_password = tk.Entry(self, width=20)
-        self.input_customuseragent = tk.Entry(self, width=50)
+        self.input_path = ttk.Entry(self, width=50, textvariable=self.path)
+        self.input_upload = ttk.Entry(self, width=50, textvariable=self.path)
+        self.input_speedlimit = ttk.Entry(self, width=5)
+        self.input_username = ttk.Entry(self, width=20)
+        self.input_password = ttk.Entry(self, width=20)
+        self.input_customuseragent = ttk.Entry(self, width=50)
 
         # buttons
-        self.button_select_path = tk.Button(
+        self.button_select_path = ttk.Button(
             self,
             text="Choose folder",
             command=self.ask_for_directory
         )
-        self.button_download = tk.Button(
+        self.button_download = ttk.Button(
             self,
             text="Download file",
             command=self.download_file
         )
-        self.button_select_file = tk.Button(
+        self.button_select_file = ttk.Button(
             self,
             text="Choose file",
             command=self.ask_for_file
         )
-        self.button_upload = tk.Button(
+        self.button_upload = ttk.Button(
             self,
             text="Upload file",
             command=self.upload_file
         )
-        self.button_debug = tk.Button(
+        self.button_debug = ttk.Button(
             self,
             text="Debug mode",
             command=self.debug_mode
         )
-        self.button_proxy = tk.Button(
+        self.button_proxy = ttk.Button(
             self,
             text="Set proxy",
             command=self.set_proxy,
             state=tk.DISABLED
         )
-        self.button_cookies = tk.Button(
+        self.button_cookies = ttk.Button(
             self,
             text="Set cookies",
             command=self.set_cookies

@@ -1,5 +1,6 @@
 import tkinter as tk
 
+from tkinter import ttk
 
 class CookiesWindow(tk.Toplevel):
 
@@ -19,7 +20,7 @@ class CookiesWindow(tk.Toplevel):
 
         self.make_window()
 
-        self.label_information = tk.Label(
+        self.label_information = ttk.Label(
             self,
             text="Write your cookies in format cookie1=value1 \n "
                  "Divide cookies by new line",

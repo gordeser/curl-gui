@@ -28,16 +28,16 @@ class DebugWindow(tk.Toplevel):
 
         self.checkbutton_verbose = ttk.Checkbutton(
             self,
-            text="Enable verbose mode",
+            text="Verbose mode",
             variable=parent.verbose
         )
 
-        self.button_export_debug = tk.Button(
+        self.button_export_debug = ttk.Button(
             self,
             text="Export logs to file",
             command=parent.export_debug
         )
-        self.button_clear_logs = tk.Button(
+        self.button_clear_logs = ttk.Button(
             self,
             text="Clear logs",
             command=self.clear_logs
