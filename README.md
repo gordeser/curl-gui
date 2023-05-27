@@ -34,4 +34,4 @@ Run tests from CLI using `python -m unittest tests/run_tests.py`
 In case of errors, try `python -m unittest tests/run_tests.py` \
 or try to install module unittest using `pip install unittest` or `pip3 install unittest` \
 
-In case of `TclError` error run tests again
+In case of `TclError` run tests again
