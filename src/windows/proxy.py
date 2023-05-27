@@ -6,7 +6,7 @@ from tkinter import ttk
 class ProxyWindow(tk.Toplevel):
     def make_window(self):
         self.title("Set Proxy")
-        self.geometry("300x175")
+        self.geometry("295x165")
         self.resizable(False, False)
         self.withdraw()
 

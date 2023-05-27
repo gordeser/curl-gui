@@ -12,9 +12,9 @@ class DebugWindow(tk.Toplevel):
         self.withdraw()
 
     def set_positions(self):
-        self.checkbutton_verbose.place(x=20, y=460)
-        self.button_export_debug.place(x=650, y=460)
-        self.button_clear_logs.place(x=350, y=460)
+        self.checkbutton_verbose.place(x=10, y=460)
+        self.button_export_debug.place(x=690, y=460)
+        self.button_clear_logs.place(x=375, y=460)
         self.text_logs.place(x=0, y=0)
 
     def clear_logs(self):
@@ -29,7 +29,8 @@ class DebugWindow(tk.Toplevel):
         self.checkbutton_verbose = ttk.Checkbutton(
             self,
             text="Verbose mode",
-            variable=parent.verbose
+            variable=parent.verbose,
+            width=13
         )
 
         self.button_export_debug = ttk.Button(
@@ -40,9 +41,10 @@ class DebugWindow(tk.Toplevel):
         self.button_clear_logs = ttk.Button(
             self,
             text="Clear logs",
-            command=self.clear_logs
+            command=self.clear_logs,
+            width=13
         )
 
-        self.text_logs = tk.Text(self, state=tk.DISABLED, width=100, height=25)
+        self.text_logs = tk.Text(self, state=tk.DISABLED, width=100, height=28)
 
         self.set_positions()

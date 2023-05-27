@@ -23,7 +23,7 @@ class CookiesWindow(tk.Toplevel):
 
         self.label_information = ttk.Label(
             self,
-            text="Write your cookies in format cookie1=value1 \n "
+            text="Write your cookies in format cookie1=value1 \n"
                  "Divide cookies by new line",
             font=("Arial", 14)
         )

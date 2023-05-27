@@ -29,7 +29,7 @@ class Application(tk.Tk):
 
     def make_window(self):
         self.title("cURL GUI")
-        self.geometry("1000x500")
+        self.geometry("660x460")
         self.resizable(False, False)
 
     def ask_for_directory(self):
@@ -310,36 +310,36 @@ class Application(tk.Tk):
             self.button_proxy.configure(state=tk.DISABLED)
 
     def set_positions(self):
-        self.label_title.place(x=175, y=10)
-        self.label_download_url.place(x=10, y=100)
-        self.label_path_to_save.place(x=10, y=130)
+        self.label_title.place(x=250, y=10)
+        self.label_download_url.place(x=57, y=80)
+        self.label_path_to_save.place(x=22, y=130)
         self.label_path_to_upload.place(x=10, y=160)
-        self.label_speedlimit.place(x=500, y=75)
-        self.label_useragent.place(x=700, y=75)
-        self.label_httpbasicauth.place(x=660, y=290)
-        self.label_username.place(x=670, y=330)
-        self.label_password.place(x=670, y=360)
+        self.label_speedlimit.place(x=400, y=340)
+        self.label_useragent.place(x=40, y=260)
+        self.label_httpbasicauth.place(x=40, y=340)
+        self.label_username.place(x=40, y=370)
+        self.label_password.place(x=40, y=400)
 
-        self.input_download.place(x=150, y=100)
-        self.input_path.place(x=150, y=130)
-        self.input_upload.place(x=150, y=160)
-        self.input_speedlimit.place(x=500, y=100)
-        self.input_username.place(x=750, y=330)
-        self.input_password.place(x=750, y=360)
-        self.input_customuseragent.place(x=700, y=130)
+        self.input_download.place(x=140, y=80)
+        self.input_path.place(x=140, y=130)
+        self.input_upload.place(x=140, y=160)
+        self.input_speedlimit.place(x=400, y=380)
+        self.input_username.place(x=130, y=370)
+        self.input_password.place(x=130, y=400)
+        self.input_customuseragent.place(x=250, y=290)
 
         self.button_select_path.place(x=460, y=125)
         self.button_download.place(x=550, y=125)
         self.button_select_file.place(x=460, y=155)
         self.button_upload.place(x=550, y=155)
-        self.button_debug.place(x=350, y=250)
-        self.button_proxy.place(x=450, y=250)
-        self.button_cookies.place(x=400, y=300)
+        self.button_debug.place(x=250, y=210)
+        self.button_proxy.place(x=135, y=210)
+        self.button_cookies.place(x=370, y=210)
 
-        self.combobox_speedlimit.place(x=550, y=100)
-        self.combobox_useragent.place(x=700, y=100)
+        self.combobox_speedlimit.place(x=450, y=380)
+        self.combobox_useragent.place(x=40, y=290)
 
-        self.checkbutton_enable_proxy.place(x=500, y=200)
+        self.checkbutton_enable_proxy.place(x=40, y=210)
 
     def set_binds(self):
         def on_entry_click_in(_):
@@ -397,7 +397,7 @@ class Application(tk.Tk):
         )
         self.label_download_url = ttk.Label(
             self,
-            text="Download URL: ",
+            text="Hostname: ",
             font=FONT_TEXT
         )
         self.label_path_to_save = ttk.Label(
@@ -413,12 +413,12 @@ class Application(tk.Tk):
         self.label_speedlimit = ttk.Label(
             self,
             text="Speed limit",
-            font=FONT_TEXT
+            font=FONT_SECTION
         )
         self.label_useragent = ttk.Label(
             self,
-            text="Choose user-agent",
-            font=FONT_TEXT
+            text="User-agent",
+            font=FONT_SECTION
         )
         self.label_httpbasicauth = ttk.Label(
             self,
@@ -453,38 +453,45 @@ class Application(tk.Tk):
         self.button_select_path = ttk.Button(
             self,
             text="Choose folder",
-            command=self.ask_for_directory
+            command=self.ask_for_directory,
+            width=13
         )
         self.button_download = ttk.Button(
             self,
             text="Download file",
-            command=self.download_file
+            command=self.download_file,
+            width=13
         )
         self.button_select_file = ttk.Button(
             self,
             text="Choose file",
-            command=self.ask_for_file
+            command=self.ask_for_file,
+            width=13
         )
         self.button_upload = ttk.Button(
             self,
             text="Upload file",
-            command=self.upload_file
+            command=self.upload_file,
+            width=13
         )
         self.button_debug = ttk.Button(
             self,
             text="Debug mode",
-            command=self.debug_mode
+            command=self.debug_mode,
+            width = 13
         )
         self.button_proxy = ttk.Button(
             self,
             text="Set proxy",
             command=self.set_proxy,
+            width=13,
             state=tk.DISABLED
         )
         self.button_cookies = ttk.Button(
             self,
             text="Set cookies",
-            command=self.set_cookies
+            command=self.set_cookies,
+            width = 13
         )
 
         # combo boxes
@@ -497,7 +504,7 @@ class Application(tk.Tk):
         self.combobox_useragent = ttk.Combobox(
             self,
             values=list(self.useragents),
-            width=30,
+            width=29,
             state="readonly"
         )
 
@@ -506,7 +513,7 @@ class Application(tk.Tk):
             self,
             text="Enable proxy",
             variable=self.proxy,
-            command=self.set_proxy_button
+            command=self.set_proxy_button,
         )
 
         # windows
