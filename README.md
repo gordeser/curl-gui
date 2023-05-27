@@ -18,10 +18,20 @@ For advanced users, the application has **debug mode**, where you can also **ena
 
 Install requirements using `pip install -r requirements.txt`
 
+In case of errors, try `pip3 install -r requirements.txt`
+
 ## Start application
 
-Start application using `python3 main.py`
+Start application using `python main.py`
+
+In case of errors, try `python3 main.py`
 
 ## Run tests
 
-Run tests from CLI using `...`
+Run tests from CLI using `python -m unittest tests/run_tests.py`
+
+
+In case of errors, try `python -m unittest tests/run_tests.py` \
+or try to install module unittest using `pip install unittest` or `pip3 install unittest` \
+
+In case of `TclError` error run tests again
