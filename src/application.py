@@ -478,7 +478,7 @@ class Application(tk.Tk):
             self,
             text="Debug mode",
             command=self.debug_mode,
-            width = 13
+            width=13
         )
         self.button_proxy = ttk.Button(
             self,
@@ -491,7 +491,7 @@ class Application(tk.Tk):
             self,
             text="Set cookies",
             command=self.set_cookies,
-            width = 13
+            width=13
         )
 
         # combo boxes
