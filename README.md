@@ -24,10 +24,8 @@ In case of errors, try `python3 main.py`
 
 ## Run tests
 
-Run tests from CLI using `python -m unittest tests/run_tests.py`
+Run tests from CLI using `python -m unittest -b tests_package/run_tests.py`
 
-
-In case of errors, try `python -m unittest tests/run_tests.py` \
-or try to install module unittest using `pip install unittest` or `pip3 install unittest` \
+In case of errors, try `python3 -m unittest -b tests_package/run_tests.py` \
 
 In case of `TclError` run tests again

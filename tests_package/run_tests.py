@@ -13,14 +13,14 @@ import pycodestyle
 class PEP8TestCase(unittest.TestCase):
     def test_pep8_compliance(self):
         files = [
-            '../src/application.py',
-            '../src/constants.py',
-            '../src/main.py',
-            '../src/utils.py',
-            '../src/windows/cookies.py',
-            '../src/windows/debug.py',
-            '../src/windows/proxy.py',
-            'run_tests.py'
+            'main.py',
+            './src/application.py',
+            './src/constants.py',
+            './src/utils.py',
+            './src/windows/cookies.py',
+            './src/windows/debug.py',
+            './src/windows/proxy.py',
+            './tests_package/run_tests.py'
         ]
         style_guide = pycodestyle.StyleGuide()
         result = style_guide.check_files(files)
