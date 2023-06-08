@@ -14,7 +14,9 @@ For advanced users, the application has **debug mode**, where you can also **ena
 
 Install requirements using `pip install -r requirements.txt`
 
-In case of errors, try `pip3 install -r requirements.txt`
+In case of errors, try `pip3 install -r requirements.txt` \
+or try `sudo apt-get install python3-tk` on Linux \
+or try `brew install python-tk` on Mac
 
 ## Start application
 
