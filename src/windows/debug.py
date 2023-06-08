@@ -45,6 +45,6 @@ class DebugWindow(tk.Toplevel):
             width=13
         )
 
-        self.text_logs = tk.Text(self, state=tk.DISABLED, width=100, height=28)
+        self.text_logs = tk.Text(self, state=tk.DISABLED, width=100, height=25)
 
         self.set_positions()

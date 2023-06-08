@@ -29,7 +29,7 @@ class Application(tk.Tk):
 
     def make_window(self):
         self.title("cURL GUI")
-        self.geometry("660x460")
+        self.geometry("750x460")
         self.resizable(False, False)
 
     def ask_for_directory(self):
@@ -210,7 +210,7 @@ class Application(tk.Tk):
                   f"--limit-rate {str(self.speedlimit)}{postfix} " \
                   f"-o {path_to_save}/{file_name} " \
                   f"-L " \
-                  f"{link_download}"
+                  f"{link_download}".split()
         returncode = self.execute(command)
         message = self.errors[returncode]
         if message:
@@ -255,7 +255,7 @@ class Application(tk.Tk):
                   f"--limit-rate {str(self.speedlimit)}{postfix} " \
                   f"-F file=@{file} " \
                   f"-L " \
-                  f"{path_to_upload}"
+                  f"{path_to_upload}".split()
         returncode = self.execute(command)
         message = self.errors[returncode]
         if message:
@@ -323,15 +323,15 @@ class Application(tk.Tk):
         self.input_download.place(x=140, y=80)
         self.input_path.place(x=140, y=130)
         self.input_upload.place(x=140, y=160)
-        self.input_speedlimit.place(x=300, y=370)
+        self.input_speedlimit.place(x=320, y=370)
         self.input_username.place(x=130, y=370)
         self.input_password.place(x=130, y=400)
-        self.input_customuseragent.place(x=250, y=290)
+        self.input_customuseragent.place(x=350, y=290)
 
         self.button_select_path.place(x=460, y=125)
-        self.button_download.place(x=550, y=125)
+        self.button_download.place(x=600, y=125)
         self.button_select_file.place(x=460, y=155)
-        self.button_upload.place(x=550, y=155)
+        self.button_upload.place(x=600, y=155)
         self.button_debug.place(x=250, y=210)
         self.button_proxy.place(x=135, y=210)
         self.button_cookies.place(x=370, y=210)
@@ -436,18 +436,18 @@ class Application(tk.Tk):
         )
         self.input_path = ttk.Entry(
             self,
-            width=50,
+            width=35,
             textvariable=self.path_download
         )
         self.input_upload = ttk.Entry(
             self,
-            width=50,
+            width=35,
             textvariable=self.path_upload
         )
         self.input_speedlimit = ttk.Entry(self, width=5)
         self.input_username = ttk.Entry(self, width=20)
         self.input_password = ttk.Entry(self, width=20)
-        self.input_customuseragent = ttk.Entry(self, width=50)
+        self.input_customuseragent = ttk.Entry(self, width=30)
 
         # buttons
         self.button_select_path = ttk.Button(

@@ -25,7 +25,7 @@ class CookiesWindow(tk.Toplevel):
             self,
             text="Write your cookies in format cookie1=value1 \n"
                  "Divide cookies by new line",
-            font=("Arial", 14)
+            font=("Arial", 12)
         )
 
         self.text_cookies = tk.Text(self, width=48, height=14)
